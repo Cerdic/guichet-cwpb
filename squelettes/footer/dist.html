@@ -1,0 +1,17 @@
+<div class="row">
+	<div class="col-12">
+		<BOUCLE_annee(ARTICLES){par date}{0,1}>[(#DATE|annee|!={#VAL{Y}|date}|oui)[(#DATE|annee)]]</BOUCLE_annee>-</B_annee>[(#DATE|annee) ] &mdash; Coworking Pays-Basque<br />
+		<a href="https://www.coworking-pb.com/">Retour au site CWPB</a>
+			<?php
+		if (isset($GLOBALS['visiteur_session']['id_auteur']) AND $GLOBALS['visiteur_session']['id_auteur']) {
+		?><span class="sep"> | </span><a href="#URL_LOGOUT" rel="nofollow"><:icone_deconnecter:></a><?php
+			if (include_spip('inc/autoriser') AND autoriser('ecrire')){
+			?><span class="sep"> | </span><a href="#EVAL{_DIR_RESTREINT_ABS}"><:espace_prive:></a><?php
+			}
+		}
+		else {
+		?><span class="sep"> | </span><a href="[(#URL_PAGE{login}|parametre_url{url,#SELF|parametre_url{url,''}})]" rel="nofollow" class='login_modal'><:lien_connecter:></a><?php
+		}
+		?></p>
+	</div>
+</div>

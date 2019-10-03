@@ -1,0 +1,33 @@
+<body>
+	<div class="header-wrap">
+		<div class="page">
+			<div class="container header" id="header">
+				<INCLURE{fond=header/#ENV{type-page},env} />
+			</div>
+			[<div class="navbar navbar-expand-md navbar-dark bg-dark" id="nav">
+				(#INCLURE{fond=inclure/nav,env}|navbar_responsive)
+			</div>]
+		</div>
+	</div>
+	<div class="page">
+		<div class="container">
+			<div class="row row-content">
+				<div class="content col-sm-12 col-md-9 col-lg-8" id="content">
+					<nav class="nav-breadcrumb" aria-label="Breadcrumb">
+						<INCLURE{fond=breadcrumb/#ENV{type-page},env} />
+					</nav>
+					<INCLURE{fond=content/#ENV{type-page},env} />
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="footer-wrap">
+		<div class="page">
+			<div class="container">
+				<div class="footer" id="footer">
+					<INCLURE{fond=footer/#ENV{type-page},env} />
+				</div>
+			</div>
+		</div>
+	</div>
+</body>

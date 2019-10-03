@@ -1,0 +1,99 @@
+@import "css/bootstrap-start";
+
+@mixin link-nav($color, $color-hover) {
+  color:$color;
+  text-decoration: none;
+  @include hover-focus-active {
+    color:$color-hover;
+    @content;
+  }
+}
+
+@mixin link-content($color, $color-hover) {
+  color:$color;
+  @include hover-focus-active {
+    color:$color-hover;
+    @content;
+  }
+}
+
+@mixin link-underlined-hover-only($color, $color-hover) {
+  color:$color;
+  text-decoration: none;
+  @include hover-focus-active {
+    color:$color-hover;
+    text-decoration: underline;
+    @content;
+  }
+}
+
+@mixin link-underlined($color, $color-hover) {
+  color:$color;
+  text-decoration: underline;
+  @include hover-focus-active {
+    color:$color-hover;
+    text-decoration: none;
+    @content;
+  }
+}
+
+
+html {
+  background: $primary;
+  font-size: 18em/16;
+  line-height: $line-height-base;
+}
+body {
+  background: $white;
+}
+
+.header-wrap {
+  background: $gray-500;
+  color: $white;
+  padding:$rem-vert-margin 0;
+  margin-bottom: $rem-vert-margin;
+  h1 {
+    color:inherit;
+    background-color: inherit;
+    &:before {
+      display: block;
+      content:'';
+      width: 220px;
+      height: 55px;
+      background: url(img/logo-cwpb.svg) no-repeat top left;
+      background-size: contain;
+      margin-bottom: 0.5 * $rem-vert-margin;
+    }
+  }
+  a {
+    @include link-underlined($white, $gray-200);
+  }
+  .accueil a {
+    @include link-underlined-hover-only($white, $gray-200){
+      background: transparent;
+    }
+  }
+}
+
+.footer-wrap {
+  font-size: 14rem/18;
+  background: $primary;
+  color: $white;
+  padding:2 * $rem-vert-margin 0;
+  margin-top: 2 * $rem-vert-margin;
+  a {
+    @include link-underlined(inherit, $secondary);
+  }
+  .footer {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+}
+
+.nav-breadcrumb {
+  display: none;
+}
+#content {
+  min-height: 40rem;
+}
