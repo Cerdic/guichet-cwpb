@@ -13,6 +13,9 @@ if (!defined('_ECRIRE_INC_VERSION')) return;
 if (!defined('_DIR_DOLI')) {
 	die('Undefined _DIR_DOLI');
 }
+if (!defined('_USER_DOLI')) {
+	die('Undefined _USER_DOLI');
+}
 
 // Global variables
 $version = '1.7';
@@ -23,7 +26,7 @@ function doli_connect() {
 	global $db, $mysoc, $langs, $conf, $user, $hookmanager;
 	if (is_null($connexion)) {
 		// L'utilisateur dolibarr utilisé
-		$utilisateur_dolibarr = "webmaster@nursit.net";
+		$utilisateur_dolibarr = _USER_DOLI;
 		// Include Dolibarr environment
 		require_once(_DIR_DOLI . "master.inc.php");
 		// After this $db, $mysoc, $langs and $conf->entity are defined. Opened handler to database will be closed at end of file.
@@ -505,53 +508,3 @@ $data2 = array(
 );
 $id_paiement = createPaiement($langs, $user, $db, $data2);
 */
-
-
-
-
-// Tests
-//
-/*
-
-$script_file = basename(__FILE__);
-print "***** " . $script_file . " (" . $version . ") *****\n";
-
-#Id client dolibarr
-$socid = 114;
-#ID produit Dolibarr
-$id_produit = 2;
-
-$lignes = array(
-	array(
-		'id_produit' => 2,
-		'quantite' => 2,
-		'prix_unitaire' => 100,
-		'taux_tva' => 20,
-		'total_ht' => 200,
-		'total_tva' => 40,
-		'total_ttc' => 240,
-		'libelle' => "Hello world"
-	)
-);
-
-$error = createDoliFacture($socid, $id_produit, $lignes);
-
-$data = array(
-	'nom' => "Mamet",
-	'prenom' => "Benoit",
-	'societe' => "Nursit",
-	'adresse' => "37 rue d'antin",
-	'complement_adresse' => "au bout de la rue",
-	'boite_postale' => "",
-	'code_postal' => 59000,
-	'ville' => "Lille",
-	'pays' => "FR",
-	'tel' => "03.20.54.64.29",
-	'site' => "http://nursit.com",
-	'email' => "bmamet@nordnet.fr"
-);
-
-
-$error += createSociete($data);
-*/
-
