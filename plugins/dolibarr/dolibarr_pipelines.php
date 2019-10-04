@@ -32,6 +32,27 @@ function dolibarr_bank_dsp2_renseigner_facturation($flux) {
 
 
 /**
+ * Creer la facture dans dolibarr au moment de la creation de la facture en base SPIP
+ * @param $flux
+ * @return mixed
+ */
+function dolibarr_post_insertion($flux) {
+
+	if ($flux['args']['table'] == 'spip_factures'
+	  and $id_facture = $flux['args']['id_objet']) {
+
+		include_spip('inc/dolibarr_generer_facture');
+		$facture = $flux['data'];
+		// TODO
+		// $flux['data'] = dolibarr_generer_facture($id_facture, $facture);
+
+	}
+
+	return $flux;
+}
+
+
+/**
  * Marquer la facture doli comme payee
  * @param array $flux
  * @return mixed

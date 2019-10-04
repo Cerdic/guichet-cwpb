@@ -17,7 +17,7 @@ include_spip('inc/dolibarr');
  * @param $id_auteur
  * @return bool|int
  */
-function actualiser_societe_dolibarr($id_auteur) {
+function dolibarr_actualiser_societe($id_auteur) {
 	$auteur = sql_fetsel('*', 'spip_auteurs', 'id_auteur='.intval($id_auteur));
 	if (!$auteur) {
 		spip_log("actualiser_societe_dolibar : $id_auteur non trouve", "dolibarr"._LOG_ERREUR);
@@ -63,9 +63,9 @@ function actualiser_societe_dolibarr($id_auteur) {
  * @param $facture array
  * @return mixed
  */
-function generer_facture_dolibarr($id_facture, $facture) {
+function dolibarr_generer_facture($id_facture, $facture) {
 
-	$socid = actualiser_societe_dolibarr($facture['id_auteur']);
+	$socid = dolibarr_actualiser_societe($facture['id_auteur']);
 	if (!$socid) {
 		spip_log("generer_facture_dolibarr : Facture $id_facture sans auteur", "dolibarr"._LOG_ERREUR);
 		return $facture;
@@ -84,7 +84,7 @@ function generer_facture_dolibarr($id_facture, $facture) {
 			$taux_tva = round(($item['gross_price'] - $item['net_price']) / $item['net_price'] * 100,1);
 		}
 
-
+		// TODO : code generique
 		$ligne = array(
 			'id_produit' => 2, // produit hebergement par defaut
 			'quantite' => $item['quantity'],

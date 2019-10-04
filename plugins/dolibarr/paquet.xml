@@ -16,5 +16,6 @@
 
 	<pipeline nom="bank_dsp2_renseigner_facturation" inclure="dolibarr_pipelines.php" />
 	<pipeline nom="bank_traiter_reglement" inclure="dolibarr_pipelines.php" />
+	<pipeline nom="post_insertion" inclure="dolibarr_pipelines.php" />
 
 </paquet>
