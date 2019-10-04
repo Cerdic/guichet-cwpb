@@ -41,6 +41,9 @@
 html {
   background: $primary;
   font-size: 18em/16;
+  @include media-breakpoint-down(sm) {
+    font-size: 16em/16;
+  }
   line-height: $line-height-base;
 }
 body {
