@@ -1,0 +1,9 @@
+<BOUCLE_trans(TRANSACTIONS){id_transaction}{transaction_hash}{statut=commande}><BOUCLE_facture(factures){id_facture}>
+	<h1>Payer la facture #NO_COMPTABLE <small>du [(#DATE|affdate)]</small></h1>
+		[(#SET{titre,[(#VAL{<:guichet:label_montant:>}|concat{' ',#_trans:MONTANT|affiche_monnaie})]})]
+
+		<INCLURE{fond=modeles/payer_acte,id_transaction,transaction_hash,title=#GET{titre}}>
+</BOUCLE_facture></BOUCLE_trans>
+	<h1>Payer une facture</h1>
+	<p class="error">Erreur : aucune facture ne correspond</p>
+<//B_trans>

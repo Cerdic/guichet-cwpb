@@ -10,12 +10,23 @@
 
 if (!defined('_ECRIRE_INC_VERSION')) return;
 
-if (!defined('_DIR_DOLI')) {
-	die('Undefined _DIR_DOLI');
+if (!defined('_DOLIBARR_DIR')) {
+	die('Undefined _DOLIBARR_DIR');
 }
-if (!defined('_USER_DOLI')) {
-	die('Undefined _USER_DOLI');
+if (!defined('_DOLIBARR_USER_DOLI')) {
+	die('Undefined _DOLIBARR_USER_DOLI');
 }
+if (!defined('_DOLIBARR_ID_BANK_PAIEMENT')) {
+	die('Undefined _DOLIBARR_ID_BANK_PAIEMENT');
+}
+if (!defined('_DOLIBARR_ID_BANK_PAIEMENT_STRIPE')) {
+	die('Undefined _DOLIBARR_ID_BANK_PAIEMENT_STRIPE');
+}
+
+defined('_DOLIBARR_TYPE_PAIEMENT_CB') || define('_DOLIBARR_TYPE_PAIEMENT_CB', 6);
+defined('_DOLIBARR_TYPE_PAIEMENT_CHEQUE') || define('_DOLIBARR_TYPE_PAIEMENT_CHEQUE', 7);
+defined('_DOLIBARR_TYPE_PAIEMENT_VIREMENT') || define('_DOLIBARR_TYPE_PAIEMENT_VIREMENT', 2);
+
 
 // Global variables
 $version = '1.7';
@@ -26,9 +37,9 @@ function doli_connect() {
 	global $db, $mysoc, $langs, $conf, $user, $hookmanager;
 	if (is_null($connexion)) {
 		// L'utilisateur dolibarr utilisé
-		$utilisateur_dolibarr = _USER_DOLI;
+		$utilisateur_dolibarr = _DOLIBARR_USER_DOLI;
 		// Include Dolibarr environment
-		require_once(_DIR_DOLI . "master.inc.php");
+		require_once(_DOLIBARR_DIR . "master.inc.php");
 		// After this $db, $mysoc, $langs and $conf->entity are defined. Opened handler to database will be closed at end of file.
 		//spip_log('init : conf->entity='.var_export($conf->entity, true),'doli');
 		if ($db->lastqueryerror) {
@@ -437,10 +448,23 @@ function doli_importer_facture_en_base_spip($factid, $factref = '') {
 		return false;
 	}
 
-	$client = $socid->name . "<br />\n"
-	  . $socid->address . "<br />\n"
-	  . $socid->zip . ' ' . $socid->town  . "<br />\n"
-	  . $socid->country_code;
+	$client = $societe->name . "<br />\n"
+	  . $societe->address . "<br />\n"
+	  . $societe->zip . ' ' . $societe->town  . "<br />\n"
+	  . $societe->country_code;
+
+	$client_json = json_encode(
+		[
+			'name' => $societe->name,
+			'address' => $societe->address,
+			'zip' => $societe->zip,
+			'city' => $societe->town,
+			'state' => $societe->country_code,
+			'email' => $societe->email,
+		]
+	);
+
+	$client .= "\n<!--$client_json-->";
 
 	$details = "";
 	foreach ($facture->lines as $line){
@@ -483,13 +507,15 @@ function doli_importer_facture_en_base_spip($factid, $factref = '') {
 	$set = array(
 		'id_auteur' => $id_auteur,
 		'no_comptable' => $reference,
-		'montant_ht' => round($fact_ht,2),
-		'montant' => round($fact_ttc, 2),
+		'montant_ht' => str_replace(',','.', round($fact_ht,2)),
+		'montant' => str_replace(',','.', round($fact_ttc, 2)),
 		'date' => $fact_date,
 		'client' => $client,
 		'details' => $details,
 		'parrain' => 'dolibarr',
+		'tracking_id' => $facture->id,
 	);
+
 	$id_facture = sql_insertq('spip_factures',$set);
 
 	return $id_facture;

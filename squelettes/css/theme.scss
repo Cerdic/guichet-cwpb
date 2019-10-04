@@ -96,4 +96,30 @@ body {
 }
 #content {
   min-height: 40rem;
+  h1 {
+    small {
+      display: block;
+      line-height: $line-height-base;
+    }
+  }
+}
+
+.page_payer-facture {
+  .content {
+    #formulaire_mode_paiement {
+      background: $gray-200;
+      padding: $grid-gutter-width;
+      .payer_modes {
+        .payer_stripe .titre {
+          display: none;
+        }
+        .boutons {
+          text-align: right;
+        }
+        .btn {
+          @include button-variant(theme-color("primary"), theme-color("primary"));
+        }
+      }
+    }
+  }
 }

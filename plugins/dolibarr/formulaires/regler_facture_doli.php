@@ -125,6 +125,8 @@ function inserer_transaction_selon_facture($id_facture) {
 		'id_auteur' => $facture['id_auteur'],
 		'montant_ht' => $facture['montant_ht'],
 		'parrain' => $facture['parrain'],
+		'tracking_id' => $facture['tracking_id'],
+		'auteur' => $facture['client'],
 		'force' => false, // recuperer une transaction en commande sur cette facture si elle existe
 		'champs' => array(
 			'id_facture' => $id_facture,
