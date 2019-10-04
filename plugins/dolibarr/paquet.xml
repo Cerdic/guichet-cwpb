@@ -5,6 +5,7 @@
 	etat="dev"
 	logo="dolibarr-64.png"
 	compatibilite="[3.2.0;["
+	schema="0.1.1"
 >
 
 	<nom>Dolibarr</nom>
@@ -13,6 +14,8 @@
 	<licence lien="http://www.gnu.org/licenses/gpl-3.0.html">GPL 3</licence>
 
 	<utilise nom="factures" compatibilite="[1.0.0;*]" />
+
+	<pipeline nom="declarer_tables_objets_sql" inclure="dolibarr_administrations.php" />
 
 	<pipeline nom="bank_dsp2_renseigner_facturation" inclure="dolibarr_pipelines.php" />
 	<pipeline nom="bank_traiter_reglement" inclure="dolibarr_pipelines.php" />

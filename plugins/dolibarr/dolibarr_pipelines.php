@@ -1,4 +1,10 @@
 <?php
+/**
+ * Plugin dolibarr
+ * (c) 2019 Cedric pour Nursit
+ * Licence GPL
+ *
+ */
 
 /**
  * Renseigner les infos clients pour le paiement CB

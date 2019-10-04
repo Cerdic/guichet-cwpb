@@ -1,13 +1,11 @@
 <?php
-/*
- * Nursit.com
- * module de facturation
- *
- * Auteurs :
- * Cedric Morin, Nursit.com
- * (c) 2012 - Distribue sous licence GNU/GPL
+/**
+ * Plugin dolibarr
+ * (c) 2019 Cedric pour Nursit
+ * Licence GPL
  *
  */
+
 
 if (!defined('_ECRIRE_INC_VERSION')) return;
 include_spip('inc/dolibarr');

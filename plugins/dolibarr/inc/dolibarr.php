@@ -1,8 +1,7 @@
 <?php
 /**
- * Plugin toolbox
- * Boite a outils Nursit
- * (c) 2011 Cedric pour Nursit.net
+ * Plugin dolibarr
+ * (c) 2019 Cedric pour Nursit
  * Licence GPL
  *
  */
