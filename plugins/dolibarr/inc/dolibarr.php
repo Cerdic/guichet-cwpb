@@ -32,7 +32,7 @@ defined('_DOLIBARR_TYPE_PAIEMENT_VIREMENT') || define('_DOLIBARR_TYPE_PAIEMENT_V
 $version = '1.7';
 $error = 0;
 
-function doli_connect() {
+function dolibarr_connect() {
 	static $connexion;
 	global $db, $mysoc, $langs, $conf, $user, $hookmanager;
 	if (is_null($connexion)) {
@@ -41,9 +41,9 @@ function doli_connect() {
 		// Include Dolibarr environment
 		require_once(_DOLIBARR_DIR . "master.inc.php");
 		// After this $db, $mysoc, $langs and $conf->entity are defined. Opened handler to database will be closed at end of file.
-		//spip_log('init : conf->entity='.var_export($conf->entity, true),'doli');
+		//spip_log('init : conf->entity='.var_export($conf->entity, true),'dolibarr');
 		if ($db->lastqueryerror) {
-			spip_log($db->lasterrno.' : '.$db->lasterror."\n".$db->lastqueryerror, 'doli' . _LOG_ERREUR);
+			spip_log($db->lasterrno.' : '.$db->lasterror."\n".$db->lastqueryerror, 'dolibarr' . _LOG_ERREUR);
 		}
 
 		//$langs->setDefaultLang('fr_FR'); 	// To change default language of $langs
@@ -54,11 +54,11 @@ function doli_connect() {
 
 		// Load user and its permissions
 		$user->entity = $conf->entity;
-		//spip_log(var_export($user, true),'doli');
+		//spip_log(var_export($user, true),'dolibarr');
 		$result = $user->fetch('', $utilisateur_dolibarr); // Load user for login 'admin'. Comment line to run as anonymous user.
-		//spip_log('user->fetch : conf->entity='.var_export($conf->entity, true),'doli');
+		//spip_log('user->fetch : conf->entity='.var_export($conf->entity, true),'dolibarr');
 		if ($db->lastqueryerror) {
-			spip_log($db->lasterrno.' : '.$db->lasterror."\n".$db->lastqueryerror, 'doli' . _LOG_ERREUR);
+			spip_log($db->lasterrno.' : '.$db->lasterror."\n".$db->lastqueryerror, 'dolibarr' . _LOG_ERREUR);
 		}
 
 		if (!$result > 0) {
@@ -66,9 +66,9 @@ function doli_connect() {
 			exit;
 		}
 		$user->getrights();
-		//spip_log('getrights : conf->entity='.var_export($conf->entity, true),'doli');
+		//spip_log('getrights : conf->entity='.var_export($conf->entity, true),'dolibarr');
 		if ($db->lastqueryerror) {
-			spip_log($db->lasterrno.' : '.$db->lasterror."\n".$db->lastqueryerror, 'doli' . _LOG_ERREUR);
+			spip_log($db->lasterrno.' : '.$db->lasterror."\n".$db->lastqueryerror, 'dolibarr' . _LOG_ERREUR);
 		}
 
 		$connexion = array(
@@ -103,7 +103,7 @@ function doli_connect() {
  *       - $email
  * @return bool
  */
-function doli_renseigne_societe(&$societe, $soc_infos) {
+function dolibarr_renseigne_societe(&$societe, $soc_infos) {
 	$modif = false;
 	$infos = array(
 		'name' => trim(($soc_infos['societe'] ? $soc_infos['societe'] . " - " : '') . $soc_infos['nom'] . " " . $soc_infos['prenom']),
@@ -131,8 +131,8 @@ function doli_renseigne_societe(&$societe, $soc_infos) {
  * @param $soc array
  * @return int|bool
  */
-function doli_societe_inserer($soc) {
-	$connexion = doli_connect();
+function dolibarr_societe_inserer($soc) {
+	$connexion = dolibarr_connect();
 	$db = &$connexion['db'];
 	$user = &$connexion['user'];
 
@@ -140,7 +140,7 @@ function doli_societe_inserer($soc) {
 
 	// Start of transaction
 	$societe = new Societe ($db);
-	doli_renseigne_societe($societe, $soc);
+	dolibarr_renseigne_societe($societe, $soc);
 
 	$monsocid = $societe->create($user);
 	if ($monsocid > 0) {
@@ -150,9 +150,9 @@ function doli_societe_inserer($soc) {
 		return $monsocid;
 	}
 
-	spip_log('doli_societe_inserer : erreur ' . $societe->error . "\n", 'doli' . _LOG_ERREUR);
+	spip_log('doli_societe_inserer : erreur ' . $societe->error . "\n", 'dolibarr' . _LOG_ERREUR);
 	if ($db->lastqueryerror) {
-		spip_log($db->lasterrno.' : '.$db->lasterror."\n".$db->lastqueryerror, 'doli' . _LOG_ERREUR);
+		spip_log($db->lasterrno.' : '.$db->lasterror."\n".$db->lastqueryerror, 'dolibarr' . _LOG_ERREUR);
 	}
 
 	return false;
@@ -164,8 +164,8 @@ function doli_societe_inserer($soc) {
  * @param $soc array
  * @return int|bool
  */
-function doli_societe_modifier($socid, $soc) {
-	$connexion = doli_connect();
+function dolibarr_societe_modifier($socid, $soc) {
+	$connexion = dolibarr_connect();
 	$db = &$connexion['db'];
 	$user = &$connexion['user'];
 
@@ -174,12 +174,12 @@ function doli_societe_modifier($socid, $soc) {
 	require_once(DOL_DOCUMENT_ROOT . "/compta/facture/class/facture.class.php");
 	$societe = new Societe ($db);
 	$societe->fetch($socid);
-	if (doli_renseigne_societe($societe, $soc)) {
+	if (dolibarr_renseigne_societe($societe, $soc)) {
 		$societe->update($socid, $user);
 		if ($societe->error) {
-			spip_log('doli_societe_modifier : erreur ' . $societe->error . "\n", 'doli' . _LOG_ERREUR);
+			spip_log('doli_societe_modifier : erreur ' . $societe->error . "\n", 'dolibarr' . _LOG_ERREUR);
 			if ($db->lastqueryerror) {
-				spip_log($db->lasterrno.' : '.$db->lasterror."\n".$db->lastqueryerror, 'doli' . _LOG_ERREUR);
+				spip_log($db->lasterrno.' : '.$db->lasterror."\n".$db->lastqueryerror, 'dolibarr' . _LOG_ERREUR);
 			}
 		}
 	}
@@ -204,8 +204,8 @@ function doli_societe_modifier($socid, $soc) {
  * @return int
  */
 
-function doli_facture_inserer($socid, $lignes) {
-	$connexion = doli_connect();
+function dolibarr_facture_inserer($socid, $lignes) {
+	$connexion = dolibarr_connect();
 	$db = &$connexion['db'];
 	$user = &$connexion['user'];
 
@@ -259,9 +259,9 @@ function doli_facture_inserer($socid, $lignes) {
 		}
 	}
 
-	spip_log('doli_facture_inserer : erreur ' . $facture->error, 'doli' . _LOG_ERREUR);
+	spip_log('doli_facture_inserer : erreur ' . $facture->error, 'dolibarr' . _LOG_ERREUR);
 	if ($db->lastqueryerror) {
-		spip_log($db->lasterrno.' : '.$db->lasterror."\n".$db->lastqueryerror, 'doli' . _LOG_ERREUR);
+		spip_log($db->lasterrno.' : '.$db->lasterror."\n".$db->lastqueryerror, 'dolibarr' . _LOG_ERREUR);
 	}
 	$db->rollback();
 
@@ -274,8 +274,8 @@ function doli_facture_inserer($socid, $lignes) {
  * @param $factref string
  * @return bool|string
  */
-function doli_facture_pdf($factid, $factref = '') {
-	$connexion = doli_connect();
+function dolibarr_facture_pdf($factid, $factref = '') {
+	$connexion = dolibarr_connect();
 	$db = &$connexion['db'];
 	$langs = &$connexion['langs'];
 	$conf = &$connexion['conf'];
@@ -291,9 +291,9 @@ function doli_facture_pdf($factid, $factref = '') {
 		$facture->generateDocument($facture->modelpdf, $langs, $hidedetails, $hidedesc, $hideref);
 		$file = $conf->facture->dir_output . '/' . $facture->ref . '/' . $facture->ref . '.pdf';
 		if ($facture->error) {
-			spip_log('doli_facture_pdf : erreur ' . $facture->error, 'doli' . _LOG_ERREUR);
+			spip_log('doli_facture_pdf : erreur ' . $facture->error, 'dolibarr' . _LOG_ERREUR);
 			if ($db->lastqueryerror) {
-				spip_log($db->lasterrno.' : '.$db->lasterror."\n".$db->lastqueryerror, 'doli' . _LOG_ERREUR);
+				spip_log($db->lasterrno.' : '.$db->lasterror."\n".$db->lastqueryerror, 'dolibarr' . _LOG_ERREUR);
 			}
 		}
 		return $file;
@@ -318,8 +318,8 @@ function doli_facture_pdf($factid, $factref = '') {
  *
  * @return bool
  */
-function doli_facture_payer($factid, $data) {
-	$connexion = doli_connect();
+function dolibarr_facture_payer($factid, $data) {
+	$connexion = dolibarr_connect();
 	$db = &$connexion['db'];
 	$user = &$connexion['user'];
 
@@ -349,9 +349,9 @@ function doli_facture_payer($factid, $data) {
 		  }
 		}
 
-		spip_log('doli_facture_payer : erreur ' . $paiement->error, 'doli' . _LOG_ERREUR);
+		spip_log('doli_facture_payer : erreur ' . $paiement->error, 'dolibarr' . _LOG_ERREUR);
 		if ($db->lastqueryerror) {
-			spip_log($db->lasterrno.' : '.$db->lasterror."\n".$db->lastqueryerror, 'doli' . _LOG_ERREUR);
+			spip_log($db->lasterrno.' : '.$db->lasterror."\n".$db->lastqueryerror, 'dolibarr' . _LOG_ERREUR);
 		}
 		$db->rollback();
 
@@ -374,8 +374,8 @@ function doli_facture_payer($factid, $data) {
  * @param string $factref
  * @return Facture
  */
-function doli_recuperer_facture($factid, $factref = '') {
-	$connexion = doli_connect();
+function dolibarr_recuperer_facture($factid, $factref = '') {
+	$connexion = dolibarr_connect();
 	$db = &$connexion['db'];
 	$langs = &$connexion['langs'];
 	$conf = &$connexion['conf'];
@@ -389,8 +389,8 @@ function doli_recuperer_facture($factid, $factref = '') {
 }
 
 
-function doli_importer_facture_en_base_spip($factid, $factref = '') {
-	$connexion = doli_connect();
+function dolibarr_importer_facture_en_base_spip($factid, $factref = '') {
+	$connexion = dolibarr_connect();
 	$db = &$connexion['db'];
 	$langs = &$connexion['langs'];
 	$conf = &$connexion['conf'];

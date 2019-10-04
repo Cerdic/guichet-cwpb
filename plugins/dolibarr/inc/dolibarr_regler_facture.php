@@ -30,7 +30,7 @@ function dolibarr_regler_facture($id_transaction) {
 		spip_log("regler_facture_dolibarr $id_transaction 3",'dolibarr' . _LOG_DEBUG);
 		$factref = $facture['no_comptable'];
 
-		$f = doli_recuperer_facture(null, $factref);
+		$f = dolibarr_recuperer_facture(null, $factref);
 		if ($f and $factid = $f->id) {
 			spip_log("regler_facture_dolibarr $id_transaction 4",'dolibarr' . _LOG_DEBUG);
 			// marquer la facture comme payee dans dolibarr (sauf si montant nul, doli ne sait pas faire)
@@ -55,7 +55,7 @@ function dolibarr_regler_facture($id_transaction) {
 					$paiement['id_bank'] = _DOLIBARR_ID_BANK_PAIEMENT_STRIPE; /* id Compte Banque Stripe */
 				}
 				//spip_log("paiement $factid ".var_export($paiement,true),'dolibarr');
-				$id_paiement = doli_facture_payer($factid, $paiement);
+				$id_paiement = dolibarr_facture_payer($factid, $paiement);
 				spip_log("paiement $factid : $id_paiement",'dolibarr');
 
 
@@ -98,7 +98,7 @@ function dolibarr_pdfiser_facture($factref) {
 
 	// Generer le PDF et le recopier dans SPIP
 	if ($factref
-		and $pdf_file = doli_facture_pdf(0, $factref)
+		and $pdf_file = dolibarr_facture_pdf(0, $factref)
 	  and file_exists($pdf_file)) {
 		$dir_pdf = sous_repertoire(_DIR_IMG,"factures");
 		if (!file_exists($dir_pdf.".htaccess"))

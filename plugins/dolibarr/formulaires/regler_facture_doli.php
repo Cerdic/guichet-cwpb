@@ -45,7 +45,7 @@ function formulaires_regler_facture_doli_verifier_dist() {
 	if (!count($erreurs)) {
 
 		include_spip('inc/dolibarr');
-		$facture = doli_recuperer_facture(null, $numero);
+		$facture = dolibarr_recuperer_facture(null, $numero);
 
 		$factid = $facture->id;
 		$fact_ttc = $facture->total_ttc;
@@ -77,7 +77,7 @@ function formulaires_regler_facture_doli_traiter_dist() {
 	$numero = normaliser_saisie_numero($numero);
 
 	include_spip('inc/dolibarr');
-	$id_facture = doli_importer_facture_en_base_spip(null, $numero);
+	$id_facture = dolibarr_importer_facture_en_base_spip(null, $numero);
 	if (!$id_facture) {
 		$res['message_erreur'] = _T('regler:erreur_import_facture_dolibarr');
 	}

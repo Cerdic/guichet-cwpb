@@ -1,6 +1,10 @@
 <?php
 
-
+/**
+ * Renseigner les infos clients pour le paiement CB
+ * @param $flux
+ * @return mixed
+ */
 function dolibarr_bank_dsp2_renseigner_facturation($flux) {
 
 	// si c'est une transaction associee a un form
@@ -9,9 +13,9 @@ function dolibarr_bank_dsp2_renseigner_facturation($flux) {
 	  AND $facid = $flux['args']['tracking_id']){
 
 		include_spip("inc/dolibarr");
-		if ($facture = doli_recuperer_facture($facid)
+		if ($facture = dolibarr_recuperer_facture($facid)
 			and $socid = $facture->socid) {
-			$connexion = doli_connect();
+			$connexion = dolibarr_connect();
 			$db = &$connexion['db'];
 			$societe = new Societe($db);
 			if ($societe->fetch($socid)) {

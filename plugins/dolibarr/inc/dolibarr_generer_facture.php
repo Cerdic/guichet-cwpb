@@ -40,7 +40,7 @@ function actualiser_societe_dolibarr($id_auteur) {
 		'email' => $auteur['email'],
 	);
 	if (!$socid = $auteur['dolibarr_socid']) {
-		$socid = doli_societe_inserer($client);
+		$socid = dolibarr_societe_inserer($client);
 		if (!$socid) {
 			spip_log("actualiser_societe_dolibar : insertion societe impossible ". var_export($client,true), "dolibarr"._LOG_ERREUR);
 			return false;
@@ -50,7 +50,7 @@ function actualiser_societe_dolibarr($id_auteur) {
 		spip_log("actualiser_societe_dolibar : insertion OK auteur #".$auteur['id_auteur']." -> socid=".$socid,'dolibarr');
 	}
 	else {
-		doli_societe_modifier($socid, $client);
+		dolibarr_societe_modifier($socid, $client);
 		spip_log("actualiser_societe_dolibar : auteur #".$auteur['id_auteur']." -> socid=".$socid,'dolibarr');
 	}
 
@@ -132,7 +132,7 @@ function generer_facture_dolibarr($id_facture, $facture) {
 	}
 
 	spip_log("doli_facture_inserer $socid ".var_export($lignes,true), "dolibarr");
-	$res = doli_facture_inserer($socid, $lignes);
+	$res = dolibarr_facture_inserer($socid, $lignes);
 	spip_log("res=".var_export($res,true), 'dolibarr');
 	if (!$res or !$res['reference']) {
 		spip_log("echec creation facture #$id_facture dans dolibarr ". var_export($lignes,true), "dolibarr"._LOG_ERREUR);
