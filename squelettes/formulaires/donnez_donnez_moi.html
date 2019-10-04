@@ -1,0 +1,58 @@
+<div class="ajax formulaire_spip formulaire_configurer formulaire_#FORM formulaire_#FORM-#ENV{id,nouveau}">
+	[<p class="reponse_formulaire reponse_formulaire_ok">(#ENV**{message_ok})</p>]
+	[<p class="reponse_formulaire reponse_formulaire_erreur">(#ENV**{message_erreur})</p>]
+	[(#ENV{editable})
+	<form method='post' action='#ENV{action}'><div>
+		[(#REM) déclarer les hidden qui déclencheront le service du formulaire
+		paramêtre : url d'action ]
+		#ACTION_FORMULAIRE{#ENV{action}}
+		#SET{fl,donnez}
+		<div class="editer-groupe">
+			#SET{name,name}#SET{obli,'obligatoire'}#SET{defaut,''}#SET{erreurs,#ENV**{erreurs}|table_valeur{#GET{name}}}
+			<div class="editer editer_[(#GET{name})][ (#GET{obli})][ (#GET{erreurs}|oui)erreur]">
+				<label for="#GET{name}">[(#GET{fl}|concat{':label_',#GET{name}}|_T)]</label>[
+				<span class='erreur_message'>(#GET{erreurs})</span>
+				]<input type="text" name="#GET{name}" class="text" value="#ENV*{#GET{name},#GET{defaut}}" id="#GET{name}" [(#HTML5|et{#GET{obli}})required='required']
+			   placeholder="[(#GET{fl}|concat{':placeholder_',#GET{name}}|_T)]"/>
+			</div>
+			#SET{name,email}#SET{obli,'obligatoire'}#SET{defaut,''}#SET{erreurs,#ENV**{erreurs}|table_valeur{#GET{name}}}
+			<div class="editer editer_[(#GET{name})][ (#GET{obli})][ (#GET{erreurs}|oui)erreur]">
+				<label for="#GET{name}">[(#GET{fl}|concat{':label_',#GET{name}}|_T)]</label>[
+				<span class='erreur_message'>(#GET{erreurs})</span>
+				]<input type="text" name="#GET{name}" class="text" value="#ENV*{#GET{name},#GET{defaut}}" id="#GET{name}" [(#HTML5|et{#GET{obli}})required='required']
+			   placeholder="[(#GET{fl}|concat{':placeholder_',#GET{name}}|_T)]"/>
+			</div>
+			#SET{name,montant_don}#SET{obli,'obligatoire'}#SET{defaut,''}#SET{erreurs,#ENV**{erreurs}|table_valeur{#GET{name}}}
+			<div class="editer editer_[(#GET{name})][ (#GET{obli})][ (#GET{erreurs}|oui)erreur]">
+				<label for="#GET{name}">[(#GET{fl}|concat{':label_',#GET{name}}|_T)]</label>[
+				<span class='erreur_message'>(#GET{erreurs})</span>
+				]
+				<div class="input-group">
+					<input type="text" name="#GET{name}" class="text" value="#ENV*{#GET{name},#GET{defaut}}" id="#GET{name}" [(#HTML5|et{#GET{obli}})required='required']
+           placeholder="0.00" />
+					<div class="input-group-append">
+            <div class="input-group-text"><span class="euros">&euro;</span></div>
+          </div>
+	      </div>
+				<p class="explication"><:donnez:explication_montant_don:></p>
+			</div>
+			#SET{name,raison}#SET{obli,'obligatoire'}#SET{defaut,''}#SET{erreurs,#ENV**{erreurs}|table_valeur{#GET{name}}}
+			<div class="editer editer_[(#GET{name})][ (#GET{obli})][ (#GET{erreurs}|oui)erreur]">
+				<label for="#GET{name}">[(#GET{fl}|concat{':label_',#GET{name}}|_T)]</label>[
+				<span class='erreur_message'>(#GET{erreurs})</span>
+				]<input type="text" name="#GET{name}" class="text" value="#ENV*{#GET{name},#GET{defaut}}" id="#GET{name}" [(#HTML5|et{#GET{obli}})required='required'] />
+				<p class="explication"><:donnez:explication_raison:></p>
+			</div>
+		</div>
+
+	  [(#REM) ajouter les saisies supplémentaires : extra et autre, à cet endroit ]
+	  <!--extra-->
+	  <p class='boutons'><span class='image_loading'>&nbsp;</span>
+			<input type='submit' class='btn btn-primary' value='<:donnez:bouton_donnez|attribut_html:>' />
+	  </p>
+	</div></form>
+	]
+</div>
+<style type="text/css">
+	.euros { color:#888;}
+</style>

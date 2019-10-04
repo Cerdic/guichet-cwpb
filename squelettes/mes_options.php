@@ -21,3 +21,29 @@ function autoriser_transaction_facturer_dist($faire, $type, $id, $qui, $opt) {
 
 	return true;
 }
+
+
+if (!isset($GLOBALS['spip_pipeline']['bank_dsp2_renseigner_facturation'])) {
+	$GLOBALS['spip_pipeline']['bank_dsp2_renseigner_facturation'] = '';
+}
+$GLOBALS['spip_pipeline']['bank_dsp2_renseigner_facturation'] .= '|guichet_bank_dsp2_renseigner_facturation';
+
+/**
+ * Renseigner les infos clients pour le paiement CB
+ * @param $flux
+ * @return mixed
+ */
+function guichet_bank_dsp2_renseigner_facturation($flux) {
+
+	// si c'est une transaction associee a un don
+	if ($id_transaction = $flux['args']['id_transaction']
+	  AND $flux['args']['parrain'] == 'don'
+	  AND $auteur = $flux['args']['auteur']){
+
+		$auteur = explode(' ', $auteur);
+		$flux['data']['email'] = array_pop($auteur);
+		$flux['data']['nom'] = implode(' ', $auteur);
+	}
+
+	return $flux;
+}

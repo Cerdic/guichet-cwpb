@@ -104,9 +104,10 @@ body {
   }
 }
 
+.page_payer-don,
 .page_payer-facture {
   .content {
-    #formulaire_mode_paiement {
+    .well-payment {
       background: $gray-200;
       padding: $grid-gutter-width;
       .payer_modes {
@@ -120,6 +121,14 @@ body {
           @include button-variant(theme-color("primary"), theme-color("primary"));
         }
       }
+    }
+  }
+}
+
+.page_payer-don {
+  .well-payment {
+    h3.selectionnez {
+      display: none;
     }
   }
 }

@@ -2,7 +2,9 @@
 	<h1>Payer la facture #NO_COMPTABLE <small>du [(#DATE|affdate)]</small></h1>
 		[(#SET{titre,[(#VAL{<:guichet:label_montant:>}|concat{' ',#_trans:MONTANT|affiche_monnaie})]})]
 
+		<div class="well-payment">
 		<INCLURE{fond=modeles/payer_acte,id_transaction,transaction_hash,title=#GET{titre}}>
+		</div>
 </BOUCLE_facture></BOUCLE_trans>
 	<h1>Payer une facture</h1>
 	<p class="error">Erreur : aucune facture ne correspond</p>
