@@ -60,7 +60,7 @@ function dolibarr_regler_facture($id_transaction) {
 
 
 				if ($facture['parrain'] == 'dolibarr' && defined('_DOLIBARR_EMAIL_NOTIF_REGLEMENT_FACTURE')) {
-					$sujet = "Reglement CB facture manuelle $factref";
+					$sujet = "Reglement CB Facture Dolibarr $factref";
 					$url= generer_url_public('facture',"id_facture=$id_facture&hash=".md5($facture['details']),false,false);
 					$url_fac_doli = false;
 					if (defined('_DOLIBARR_PUBLIC_URL')) {
@@ -71,6 +71,7 @@ function dolibarr_regler_facture($id_transaction) {
 <body>
 <p><a href='$url'>$url</a></p>"
 . ($url_fac_doli ? "<p><a href='$url_fac_doli'>$url_fac_doli</a></p>" : '')
+."<div>" . $facture['client'] . "<br /></div>"
 .$facture['details']."
 </body>
 </html>";

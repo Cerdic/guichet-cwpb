@@ -39,7 +39,7 @@ function dolibarr_bank_dsp2_renseigner_facturation($flux) {
 function dolibarr_bank_traiter_reglement($flux) {
 
 	if ($id_transaction = $flux['args']['id_transaction']) {
-		include_spip('inc/generer_facture_dolibarr');
+		include_spip('inc/dolibarr_regler_facture');
 		dolibarr_regler_facture($id_transaction);
 	}
 
