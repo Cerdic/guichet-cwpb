@@ -71,4 +71,5 @@ function inserer_transaction_don($name, $email, $montant, $raison) {
 	);
 	$id_transaction = $inserer_transaction($montant, $options);
 
-	return $id_transaction;}
+	return $id_transaction;
+}
