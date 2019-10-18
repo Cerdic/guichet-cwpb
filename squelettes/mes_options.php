@@ -23,14 +23,14 @@ function autoriser_transaction_facturer_dist($faire, $type, $id, $qui, $opt) {
 }
 
 
-if (!isset($GLOBALS['spip_pipeline']['bank_dsp2_renseigner_facturation'])) {
-	$GLOBALS['spip_pipeline']['bank_dsp2_renseigner_facturation'] = '';
+foreach (['bank_dsp2_renseigner_facturation',
+	         'bank_description_transaction',
+	         'trig_bank_notifier_reglement'] as $pipe) {
+	if (!isset($GLOBALS['spip_pipeline'][$pipe])) {
+		$GLOBALS['spip_pipeline'][$pipe] = '';
+	}
+	$GLOBALS['spip_pipeline'][$pipe] .= '|guichet_' . $pipe;
 }
-$GLOBALS['spip_pipeline']['bank_dsp2_renseigner_facturation'] .= '|guichet_bank_dsp2_renseigner_facturation';
-if (!isset($GLOBALS['spip_pipeline']['bank_description_transaction'])) {
-	$GLOBALS['spip_pipeline']['bank_description_transaction'] = '';
-}
-$GLOBALS['spip_pipeline']['bank_description_transaction'] .= '|guichet_bank_description_transaction';
 
 /**
  * Renseigner les infos clients pour le paiement CB
@@ -63,4 +63,24 @@ function guichet_bank_description_transaction($flux) {
 
 	return $flux;
 
+}
+
+function guichet_trig_bank_notifier_reglement($flux) {
+	if ($id_transaction = $flux['args']['id_transaction']
+	  AND $flux['args']['row']['parrain'] == 'don'
+	  AND $auteur = $flux['args']['row']['auteur']){
+
+		$auteur = explode(' ', $auteur);
+		$email = array_pop($auteur);
+		$texte = recuperer_fond('notifications/email_reglement_don', array('id_transaction' => $id_transaction));
+
+		include_spip('inc/config');
+		$from = lire_config('bank/email_from_ticket_admin', 'administratif@coworking-pb.com');
+
+		include_spip("inc/notifications");
+		notifications_envoyer_mails($email, $texte, '', $from);
+
+	}
+
+	return $flux;
 }
