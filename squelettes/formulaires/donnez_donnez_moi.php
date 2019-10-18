@@ -22,7 +22,7 @@ function formulaires_donnez_donnez_moi_verifier_dist() {
 
 	$oblis = ['name', 'email', 'montant_don', 'raison'];
 	foreach ($oblis as $obli) {
-		if (is_null($v = _request($obli) or !strlen(trim($v)))) {
+		if (is_null($v = _request($obli)) or !strlen(trim($v))) {
 			$erreurs['obli'] = _T('information_obligatoire');
 		}
 	}
