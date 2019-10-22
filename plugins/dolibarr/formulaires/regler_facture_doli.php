@@ -52,11 +52,12 @@ function formulaires_regler_facture_doli_verifier_dist() {
 		$fact_date = date('Y-m-d H:i:s',$facture->date_validation);
 		$fact_paye = $facture->paye;
 
-		//$erreurs['message_erreur'] = "$numero : $factid : $fact_ttc : $fact_date : $fact_paye ?";
+		#$erreurs['message_erreur'] = "$numero : $factid : $fact_ttc : $fact_date : $fact_paye ?";
 
 		// si le montant est faux, on indique que les infos sont incoherentes
 		if (intval(floatval($fact_ttc) * 100) !== intval($montant * 100)) {
 			$erreurs['message_erreur'] = _T('regler:erreur_numero_montant_facture_incoherents');
+			#$erreurs['message_erreur'] .= " $fact_ttc <> $montant";
 		}
 		elseif($fact_paye) {
 			$erreurs['message_ok'] = _T('regler:erreur_facture_deja_payee');

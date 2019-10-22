@@ -28,11 +28,25 @@ function dolibarr_regler_facture($id_transaction) {
 		spip_log("regler_facture_dolibarr $id_transaction 3",'dolibarr' . _LOG_DEBUG);
 		$factref = $facture['no_comptable'];
 
-		$f = dolibarr_recuperer_facture(null, $factref);
-		if ($f and $factid = $f->id) {
+		$facture_doli = dolibarr_recuperer_facture(null, $factref);
+		if (!$facture_doli) {
+			spip_log("regler_facture_dolibarr $id_transaction ECHEC dolibarr_recuperer_facture",'dolibarr' . _LOG_ERREUR);
+		}
+		elseif (!$factid = $facture_doli->id) {
+			spip_log("regler_facture_dolibarr $id_transaction ECHEC dolibarr_recuperer_facture pas de factid",'dolibarr' . _LOG_ERREUR);
+			spip_log($facture_doli,'dolibarr' . _LOG_ERREUR);
+		}
+		else {
 			spip_log("regler_facture_dolibarr $id_transaction 4",'dolibarr' . _LOG_DEBUG);
+			$fact_paye = $facture_doli->paye;
+			if ($fact_paye) {
+				spip_log("regler_facture_dolibarr $id_transaction Facture DOLI $factref/#$factid DEJA PAYEE",'dolibarr' . _LOG_DEBUG);
+			}
+			elseif ($transaction['reglee'] !== 'oui') {
+				spip_log("regler_facture_dolibarr $id_transaction reglee!=oui",'dolibarr' . _LOG_DEBUG);
+			}
 			// marquer la facture comme payee dans dolibarr (sauf si montant nul, doli ne sait pas faire)
-			if ($transaction['reglee'] == 'oui' and !$f->paye) {
+			else {
 				spip_log("regler_facture_dolibarr $id_transaction 5",'dolibarr' . _LOG_DEBUG);
 				$libelle = _T('bank:titre_transaction').' #'.$transaction['id_transaction']; //.' | '.$transaction['mode'].' '.$transaction['autorisation_id'];
 				$paiement = array(
