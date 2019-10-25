@@ -1,0 +1,82 @@
+<div class="ajax formulaire_spip formulaire_configurer formulaire_#FORM formulaire_#FORM-#ENV{id,nouveau}">
+	[<p class="reponse_formulaire reponse_formulaire_ok">(#ENV**{message_ok})</p>]
+	[<p class="reponse_formulaire reponse_formulaire_erreur">(#ENV**{message_erreur})</p>]
+	[(#ENV{editable})
+	<form method='post' action='#ENV{action}'><div>
+		[(#REM) déclarer les hidden qui déclencheront le service du formulaire
+		paramêtre : url d'action ]
+		#ACTION_FORMULAIRE{#ENV{action}}
+		#SET{fl,adherez}
+		<div class="editer-groupe">
+			#SET{name,name}#SET{obli,'obligatoire'}#SET{defaut,''}#SET{erreurs,#ENV**{erreurs}|table_valeur{#GET{name}}}
+			<div class="editer editer_[(#GET{name})][ (#GET{obli})][ (#GET{erreurs}|oui)erreur]">
+				<label for="#GET{name}">[(#GET{fl}|concat{':label_',#GET{name}}|_T)]</label>[
+				<span class='erreur_message'>(#GET{erreurs})</span>
+				]<input type="text" name="#GET{name}" class="text" value="#ENV*{#GET{name},#GET{defaut}}" id="#GET{name}" [(#HTML5|et{#GET{obli}})required='required']
+			   placeholder="[(#GET{fl}|concat{':placeholder_',#GET{name}}|_T)]"/>
+			</div>
+			#SET{name,email}#SET{obli,'obligatoire'}#SET{defaut,''}#SET{erreurs,#ENV**{erreurs}|table_valeur{#GET{name}}}
+			<div class="editer editer_[(#GET{name})][ (#GET{obli})][ (#GET{erreurs}|oui)erreur]">
+				<label for="#GET{name}">[(#GET{fl}|concat{':label_',#GET{name}}|_T)]</label>[
+				<span class='erreur_message'>(#GET{erreurs})</span>
+				]<input type="text" name="#GET{name}" class="text" value="#ENV*{#GET{name},#GET{defaut}}" id="#GET{name}" [(#HTML5|et{#GET{obli}})required='required']
+			   placeholder="[(#GET{fl}|concat{':placeholder_',#GET{name}}|_T)]"/>
+			</div>
+			#SET{name,type_adhesion}#SET{obli,'obligatoire'}#SET{defaut,''}#SET{erreurs,#ENV**{erreurs}|table_valeur{#GET{name}}}
+			<div class="editer editer_[(#GET{name})][ (#GET{obli})][ (#GET{erreurs}|oui)erreur]">
+				<label for="#GET{name}">[(#GET{fl}|concat{':label_',#GET{name}}|_T)]</label>[
+				<span class='erreur_message'>(#GET{erreurs})</span>
+				]<select name="#GET{name}" class="select custom-select" id="#GET{name}">
+					#SET{val,adherent}
+					<option value="#GET{val}"[(#ENV{#GET{name},#GET{defaut}}|=={#GET{val}}|oui)selected="selected"]>[(#GET{fl}|concat{':label_',#GET{name},'_',#GET{val}}|_T)][ - (#GET{val}|montant_adhesion|affiche_monnaie)]</option>
+					#SET{val,stagiaire}
+					<option value="#GET{val}"[(#ENV{#GET{name},#GET{defaut}}|=={#GET{val}}|oui)selected="selected"]>[(#GET{fl}|concat{':label_',#GET{name},'_',#GET{val}}|_T)][ - (#GET{val}|montant_adhesion|affiche_monnaie)]</option>
+					#SET{val,sympathisant}
+					<option value="#GET{val}"[(#ENV{#GET{name},#GET{defaut}}|=={#GET{val}}|oui)selected="selected"]>[(#GET{fl}|concat{':label_',#GET{name},'_',#GET{val}}|_T)][ - (#GET{val}|montant_adhesion|affiche_monnaie)]</option>
+				</select>
+			</div>
+			#SET{name,recu}#SET{obli,''}#SET{defaut,''}#SET{erreurs,#ENV**{erreurs}|table_valeur{#GET{name}}}
+			<div class="editer editer_[(#GET{name})][ (#GET{obli})][ (#GET{erreurs}|oui)erreur]">[
+				<span class='erreur_message'>(#GET{erreurs})</span>
+				]<div class="choix">
+					#SET{val,non}
+					<input type="hidden" name="#GET{name}" value="#GET{val}" />
+					#SET{val,oui}
+					<input type="checkbox" name="#GET{name}" class="checkbox" id="#GET{name}_#GET{val}" value="#GET{val}" aria-describedby="#GET{name}_explication" [(#ENV{#GET{name},#GET{defaut}}|=={#GET{val}}|oui)checked="checked"] />
+					<label for="#GET{name}_#GET{val}">[(#GET{fl}|concat{':label_',#GET{name},'_',#GET{val}}|_T)]</label>
+				</div>
+			</div>
+				#SET{name,adresse_recu}#SET{obli,'obligatoire'}#SET{defaut,''}#SET{erreurs,#ENV**{erreurs}|table_valeur{#GET{name}}}
+			<div class="editer pleine_largeur editer_[(#GET{name})][ (#GET{obli})][ (#GET{erreurs}|oui)erreur]" [(#ENV{recu}|=={oui}|non)style="display:none;"]>
+				<label for="#GET{name}">[(#GET{fl}|concat{':label_',#GET{name}}|_T)]</label>[
+				<span class='erreur_message'>(#GET{erreurs})</span>
+				]<textarea name="#GET{name}" id="#GET{name}" class="textarea" rows="4">
+#ENV*{#GET{name},#GET{defaut}}</textarea>
+			</div>
+		</div>
+
+	  [(#REM) ajouter les saisies supplémentaires : extra et autre, à cet endroit ]
+	  <!--extra-->
+	  <p class='boutons'><span class='image_loading'>&nbsp;</span>
+			<input type='submit' class='btn btn-primary' value='<:adherez:bouton_adherez|attribut_html:>' />
+	  </p>
+	</div></form>
+	]
+</div>
+<style type="text/css">
+	.euros { color:#888;}
+</style>
+<script type="text/javascript">
+	function update_recu_visible() {
+		if (jQuery('#recu_oui').prop('checked')) {
+			jQuery('.editer_adresse_recu:not(:visible)').show('fast');
+		}
+		else {
+			jQuery('.editer_adresse_recu:visible').hide('fast');
+		}
+	}
+jQuery(function() {
+	update_recu_visible();
+	jQuery('#recu_oui').on('change', update_recu_visible);
+});
+</script>

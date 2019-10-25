@@ -1,0 +1,29 @@
+<BOUCLE_trans(TRANSACTIONS){id_transaction}{statut=ok}{tout}>
+<title>\[#NOM_SITE_SPIP\] <:adherez:sujet_mail_admin:> #MONTANT</title>
+
+<body>
+<div class="header">
+<h1><:adherez:titre_mail_merci_admin:></h1>
+</div>
+
+<p>
+	Une nouvelle adhésion dans la poche :
+</p>
+<ul class="spip">
+	<li>#AUTEUR</li>
+	<li>[(#MONTANT|affiche_monnaie)]</li>
+	<li><:adherez:adhesion_recue_le:>[ (#DATE_PAIEMENT|affdate)] [ (#DATE_PAIEMENT|heures_minutes)]</li>
+	<li><:bank:titre_transaction:> ##ID_TRANSACTION</li>
+</ul>
+
+#SET{infos,#CONTENU|json_decode{1}}
+<br />[<br /><b>(#GET{infos}|table_valeur{recu}|=={oui}|oui)
+	Il faut envoyer un reçu à l'ordre de :</b><br />
+	[(#GET{infos}|table_valeur{adresse_recu}|nl2br)]
+]
+
+<hr />
+
+</body>
+</BOUCLE_trans>
+#FILTRE{facteur_email_wrap_to_html}

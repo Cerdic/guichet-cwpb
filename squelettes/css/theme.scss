@@ -130,6 +130,7 @@ body {
 }
 
 .page_payer-don,
+.page_payer-adhesion,
 .page_payer-facture {
   .content {
     .well-payment {
@@ -150,7 +151,8 @@ body {
   }
 }
 
-.page_payer-don {
+.page_payer-don,
+.page_payer-adhesion {
   .well-payment {
     h3.selectionnez {
       display: none;

@@ -41,7 +41,7 @@ function guichet_bank_dsp2_renseigner_facturation($flux) {
 
 	// si c'est une transaction associee a un don
 	if ($id_transaction = $flux['args']['id_transaction']
-	  AND $flux['args']['parrain'] == 'don'
+	  AND in_array($flux['args']['parrain'], ['don', 'adhesion'])
 	  AND $auteur = $flux['args']['auteur']){
 
 		$auteur = explode(' ', $auteur);
@@ -61,24 +61,39 @@ function guichet_bank_description_transaction($flux) {
 		$flux['data']['libelle'] = $raison;
 	}
 
+	if ($id_transaction = $flux['args']['id_transaction']
+	  AND $flux['args']['parrain'] == 'adhesion'
+	  AND $raison = $flux['args']['contenu']){
+		$flux['data']['libelle'] = _T('guichet:libelle_adhesion');
+	}
+
 	return $flux;
 
 }
 
 function guichet_trig_bank_notifier_reglement($flux) {
 	if ($id_transaction = $flux['args']['id_transaction']
-	  AND $flux['args']['row']['parrain'] == 'don'
+	  AND in_array($flux['args']['row']['parrain'], ['don', 'adhesion'])
 	  AND $auteur = $flux['args']['row']['auteur']){
 
+		$what = $flux['args']['row']['parrain'];
 		$auteur = explode(' ', $auteur);
 		$email = array_pop($auteur);
-		$texte = recuperer_fond('notifications/email_reglement_don', array('id_transaction' => $id_transaction));
+		$texte = recuperer_fond('notifications/email_reglement_' . $what, array('id_transaction' => $id_transaction));
 
 		include_spip('inc/config');
 		$from = lire_config('bank/email_from_ticket_admin', 'administratif@coworking-pb.com');
 
 		include_spip("inc/notifications");
 		notifications_envoyer_mails($email, $texte, '', $from);
+
+		if ($what === 'adhesion'
+		  && defined('_GUICHET_EMAIL_NOTIF_REGLEMENT_ADHESION')) {
+			lang_select('fr');
+			$texte = recuperer_fond('notifications/email_reglement_' . $what."_admin", array('id_transaction' => $id_transaction));
+			notifications_envoyer_mails(_GUICHET_EMAIL_NOTIF_REGLEMENT_ADHESION, $texte, '', $from);
+			lang_select();
+		}
 
 	}
 

@@ -4,9 +4,9 @@ if (!defined('_ECRIRE_INC_VERSION')) return;
 
 $GLOBALS[$GLOBALS['idx_lang']] = array(
 
-	'label_name' => 'Votre nom',
+	'label_name' => 'Mon nom',
 	'placeholder_name' => 'Camille Moulin',
-	'label_email' => 'Votre email',
+	'label_email' => 'Mon email',
 	'placeholder_email' => 'camille@moulin.org',
 	'label_montant_don' => 'Montant du don',
 	'label_raison' => 'Raison',
