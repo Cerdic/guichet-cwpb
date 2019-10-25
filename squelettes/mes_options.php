@@ -7,8 +7,8 @@ function autoriser_transaction_facturer_dist($faire, $type, $id, $qui, $opt) {
 	if ($id_transaction = intval($id)
 	  and $transaction = sql_fetsel('*', 'spip_transactions', 'id_transaction='.intval($id))) {
 
-		// si c'est un DON, pas de facture
-		if ($transaction['parrain'] === 'don') {
+		// si c'est un DON ou une ADHESION, pas de facture
+		if (in_array($transaction['parrain'], ['don', 'adhesion'])) {
 			return false;
 		}
 
