@@ -38,7 +38,41 @@ function dolibarr_connect() {
 		// L'utilisateur dolibarr utilisé
 		$utilisateur_dolibarr = _DOLIBARR_USER_DOLI;
 		// Include Dolibarr environment
+		// sanitizer les globales pour ne pas que dolibar nous emmene dans une route improbable
+		// notamment avec un CONTENT_TYPE application/json sur un webhook stripe
+		$backup = [];
+		foreach(array('_COOKIE','_GET','_POST','_REQUEST','_SERVER','REQUEST_METHOD','methode',) as $k) {
+			$backup[$k] = $GLOBALS[$k];
+		}
+		$GLOBALS['_COOKIE'] = [];
+		$GLOBALS['_GET'] = [];
+		$GLOBALS['_POST'] = [];
+		$GLOBALS['_REQUEST'] = [];
+		$GLOBALS['REQUEST_METHOD'] = 'GET';
+		$GLOBALS['methode'] = 'GET';
+		$_SERVER['REQUEST_METHOD'] = 'GET';
+		$_SERVER['QUERY_STRING'] = '';
+		$_SERVER['REDIRECT_QUERY_STRING'] = '';
+		unset($_SERVER['CONTENT_TYPE']);
+		foreach(array(
+			'HTTP_GET_VARS'=>'_GET',
+			'HTTP_POST_VARS'=>'_POST',
+			'HTTP_COOKIE_VARS'=>'_COOKIE',
+			) as $k1=>$k2){
+			$GLOBALS[$k1] = $GLOBALS[$k2];
+		}
 		require_once(_DOLIBARR_DIR . "master.inc.php");
+		// restore globals
+		foreach ($backup as $k=>$v) {
+			$GLOBALS[$k] = $v;
+		}
+		foreach(array(
+			'HTTP_GET_VARS'=>'_GET',
+			'HTTP_POST_VARS'=>'_POST',
+			'HTTP_COOKIE_VARS'=>'_COOKIE',
+			) as $k1=>$k2){
+			$GLOBALS[$k1] = $GLOBALS[$k2];
+		}
 		// After this $db, $mysoc, $langs and $conf->entity are defined. Opened handler to database will be closed at end of file.
 		//spip_log('init : conf->entity='.var_export($conf->entity, true),'dolibarr');
 		if ($db->lastqueryerror) {
