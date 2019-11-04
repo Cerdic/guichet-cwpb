@@ -21,12 +21,12 @@ function dolibarr_regler_facture($id_transaction) {
 	if(!$transaction or !$id_facture = $transaction['id_facture']) {
 		return false;
 	}
-	spip_log("regler_facture_dolibarr $id_transaction 2",'dolibarr' . _LOG_DEBUG);
+	spip_log("regler_facture_dolibarr $id_transaction fact #$id_facture 2",'dolibarr' . _LOG_DEBUG);
 
 	$facture = sql_fetsel('*','spip_factures','id_facture='.intval($id_facture));
 	if ($facture['no_comptable']) {
-		spip_log("regler_facture_dolibarr $id_transaction 3",'dolibarr' . _LOG_DEBUG);
 		$factref = $facture['no_comptable'];
+		spip_log("regler_facture_dolibarr $id_transaction fact #$id_facture Ref $factref 3",'dolibarr' . _LOG_DEBUG);
 
 		$facture_doli = dolibarr_recuperer_facture(null, $factref);
 		if (!$facture_doli) {
