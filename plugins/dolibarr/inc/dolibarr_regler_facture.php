@@ -28,16 +28,7 @@ function dolibarr_regler_facture($id_transaction) {
 		$factref = $facture['no_comptable'];
 		spip_log("regler_facture_dolibarr $id_transaction fact #$id_facture Ref $factref 3",'dolibarr' . _LOG_DEBUG);
 
-		if (!function_exists('dolibarr_recuperer_facture')) {
-			spip_log('unknown function dolibarr_recuperer_facture', 'dolibarr' . _LOG_DEBUG);
-			include_spip('inc/dolibarr');
-		}
-		try {
-			$facture_doli = dolibarr_recuperer_facture(null, $factref);
-		}
-		catch (Exception $e) {
-			spip_log("try/catch Exception on dolibarr_recuperer_facture: " . $e->getMessage(),'dolibarr' . _LOG_ERREUR);
-		}
+		$facture_doli = dolibarr_recuperer_facture(null, $factref);
 		if (!$facture_doli) {
 			spip_log("regler_facture_dolibarr $id_transaction ECHEC dolibarr_recuperer_facture",'dolibarr' . _LOG_ERREUR);
 		}
