@@ -11,7 +11,7 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 	'label_montant_don' => 'Montant du don',
 	'label_raison' => 'Raison',
 	'explication_montant_don' => 'Evitez les petits montants qui génèrent proportionnellement plus de frais. Regroupez vos dons !',
-	'explication_raison' => 'Indiquez la raison de votre don si besoin (café, utilisation d\'une ressource, philantrophie…)',
+	'explication_raison' => 'Indiquez la raison de votre don si besoin (café, utilisation d\'une salle, philantropie…)',
 	'bouton_donnez' => 'Go!',
 
 	'sujet_mail_confirm' => "Nous avons bien reçu ton don",
