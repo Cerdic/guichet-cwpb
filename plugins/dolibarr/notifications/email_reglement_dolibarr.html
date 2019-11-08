@@ -1,0 +1,22 @@
+<BOUCLE_trans(TRANSACTIONS){id_transaction}{statut=ok}{tout}>#SET{ref,''}
+<BOUCLE_fact(spip_factures){id_facture}>#SET{ref,#NO_COMPTABLE}#SET{datefact,#DATE}</BOUCLE_fact>
+<title>\[#NOM_SITE_SPIP\] <:regler:titre_reglement_facture{ref=#GET{ref}}:> [(#MONTANT|affiche_monnaie)]</title>
+
+<body>
+<div class="header">
+	<h1><:regler:titre_reglement_facture{ref=#GET{ref}}:></h1>
+</div>
+
+<p>#MESSAGE</p>
+<ul class="spip">
+	<li><:factures:titre_facture:> [<b>(#GET{ref})</b> ]<:factures:info_facture_date_du:>[ (#GET{datefact}|affdate{d/m/Y})]</li>
+	<li>#AUTEUR</li>
+	<li>[(#MONTANT|affiche_monnaie)]</li>
+	<li><:regler:info_reglement_recu:>[ (#DATE_PAIEMENT|affdate)] [ (#DATE_PAIEMENT|heures_minutes)]</li>
+	<li><:bank:titre_transaction:> ##ID_TRANSACTION</li>
+</ul>
+<hr />
+
+</body>
+</BOUCLE_trans>
+#FILTRE{facteur_email_wrap_to_html}

@@ -17,7 +17,10 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 	'explication_regler_facture_montant' => 'Exemple : <tt>123.45</tt>',
 
 	'erreur_import_facture_dolibarr' => 'Une erreur technique est survenue lors de l\'import de cette facture pour paiement.',
-	'erreur_technique_creation_transaction' => 'Une erreur technique est survenue au moment de la creation de la transaction.'
+	'erreur_technique_creation_transaction' => 'Une erreur technique est survenue au moment de la creation de la transaction.',
+
+	'info_reglement_recu' => 'Règlement reçu le ',
+	'titre_reglement_facture' => 'Règlement facture @ref@',
 
 );
 

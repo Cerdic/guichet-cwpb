@@ -44,6 +44,7 @@ function dolibarr_regler_facture($id_transaction) {
 			}
 			elseif ($transaction['reglee'] !== 'oui') {
 				spip_log("regler_facture_dolibarr $id_transaction reglee!=oui",'dolibarr' . _LOG_DEBUG);
+				return false;
 			}
 			// marquer la facture comme payee dans dolibarr (sauf si montant nul, doli ne sait pas faire)
 			else {
@@ -96,6 +97,21 @@ function dolibarr_regler_facture($id_transaction) {
 			}
 
 			dolibarr_pdfiser_facture($facture['no_comptable']);
+
+			// et on envoie un mail de confirm au client de la facture pour qu'il ait une trace
+			if ($transaction['contenu'] and $infos = json_decode($transaction['contenu'], true)) {
+				$email = $infos['email'];
+
+				$contexte = array_merge($infos, array('id_transaction' => $id_transaction));
+				$texte = recuperer_fond('notifications/email_reglement_dolibarr', $contexte);
+
+				include_spip('inc/config');
+				$from = lire_config('bank/email_from_ticket_admin', $GLOBALS['meta']['email_webmaster']);
+
+				include_spip("inc/notifications");
+				notifications_envoyer_mails($email, $texte, '', $from);
+			}
+
 			return true;
 		}
 	}

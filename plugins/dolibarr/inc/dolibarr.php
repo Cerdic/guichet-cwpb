@@ -456,7 +456,12 @@ function dolibarr_importer_facture_en_base_spip($factid, $factref = '') {
 			return false;
 		}
 
-		return $id_facture;
+		if (!preg_match(",<!--(.*)-->$,ms", $facture_spip['client'], $match)
+		  or !$infos_client = json_decode($match[1], true)) {
+			$infos_client = [];
+		}
+
+		return [$id_facture, $infos_client];
 	}
 
 	// Sinon preparer les infos pour creer la facture dans spip_factures
@@ -486,17 +491,16 @@ function dolibarr_importer_facture_en_base_spip($factid, $factref = '') {
 	  . $societe->zip . ' ' . $societe->town  . "<br />\n"
 	  . $societe->country_code;
 
-	$client_json = json_encode(
-		[
-			'name' => $societe->name,
-			'address' => $societe->address,
-			'zip' => $societe->zip,
-			'city' => $societe->town,
-			'state' => $societe->country_code,
-			'email' => $societe->email,
-		]
-	);
+	$infos_client = [
+		'name' => $societe->name,
+		'address' => $societe->address,
+		'zip' => $societe->zip,
+		'city' => $societe->town,
+		'state' => $societe->country_code,
+		'email' => $societe->email,
+	];
 
+	$client_json = json_encode($infos_client);
 	$client .= "\n<!--$client_json-->";
 
 	$details = "";
@@ -551,7 +555,7 @@ function dolibarr_importer_facture_en_base_spip($factid, $factref = '') {
 
 	$id_facture = sql_insertq('spip_factures',$set);
 
-	return $id_facture;
+	return [$id_facture, $infos_client];
 }
 
 /**

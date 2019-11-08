@@ -78,12 +78,13 @@ function formulaires_regler_facture_doli_traiter_dist() {
 	$numero = normaliser_saisie_numero($numero);
 
 	include_spip('inc/dolibarr');
-	$id_facture = dolibarr_importer_facture_en_base_spip(null, $numero);
-	if (!$id_facture) {
+	$r = dolibarr_importer_facture_en_base_spip(null, $numero);
+	if (!$r) {
 		$res['message_erreur'] = _T('regler:erreur_import_facture_dolibarr');
 	}
 	else {
-		if ($id_transaction = inserer_transaction_selon_facture($id_facture)) {
+		list($id_facture, $infos_client) = $r;
+		if ($id_transaction = inserer_transaction_selon_facture($id_facture, $infos_client)) {
 			$transaction_hash = sql_getfetsel('transaction_hash','spip_transactions','id_transaction='.intval($id_transaction));
 			$redirect = generer_url_public('payer-facture',"id_transaction=$id_transaction&transaction_hash=$transaction_hash",true);
 			$res['redirect'] = $redirect;
@@ -113,7 +114,7 @@ function normaliser_saisie_numero($numero) {
 	return $numero;
 }
 
-function inserer_transaction_selon_facture($id_facture) {
+function inserer_transaction_selon_facture($id_facture, $infos=[]) {
 	if (!$id_facture or !$facture = sql_fetsel('*','spip_factures', 'id_facture='.intval($id_facture))) {
 		return false;
 	}
@@ -131,6 +132,7 @@ function inserer_transaction_selon_facture($id_facture) {
 		'force' => false, // recuperer une transaction en commande sur cette facture si elle existe
 		'champs' => array(
 			'id_facture' => $id_facture,
+			'contenu' => json_encode($infos),
 		),
 	);
 	$id_transaction = $inserer_transaction($montant, $options);
