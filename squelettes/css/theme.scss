@@ -67,6 +67,7 @@ body {
       background-size: contain;
       margin-bottom: 0.5 * $rem-vert-margin;
     }
+    margin-bottom: 0;
   }
   a {
     @include link-underlined($white, $gray-200);
@@ -74,6 +75,24 @@ body {
   .accueil a {
     @include link-underlined-hover-only($white, $gray-200){
       background: transparent;
+    }
+  }
+
+  #nav {
+    @include media-breakpoint-down(xs) {
+      display: none;
+    }
+    margin-top: $rem-vert-margin;
+    margin-bottom: -1 * $rem-vert-margin;
+    background: $secondary;
+    .navbar-collapse {
+      margin-left: -1rem;
+    }
+    a {
+      @include link-nav($gray-200, $white) {
+        text-decoration: none;
+        background-color: $primary;
+      }
     }
   }
 }

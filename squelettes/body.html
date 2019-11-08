@@ -4,9 +4,10 @@
 			<div class="container header" id="header">
 				<INCLURE{fond=header/#ENV{type-page},env} />
 			</div>
-			[<div class="navbar navbar-expand-md navbar-dark bg-dark" id="nav">
+			[(#SI_PAGE{sommaire}|oui)
+			[<div class="navbar navbar-expand-sm navbar-dark" id="nav"><div class="container">
 				(#INCLURE{fond=inclure/nav,env}|navbar_responsive)
-			</div>]
+			</div></div>]]
 		</div>
 	</div>
 	<div class="page">
