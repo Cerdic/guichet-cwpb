@@ -1,6 +1,7 @@
 <?php
 
 define('_DIR_PLUGINS_SUPPL', _DIR_RACINE . "squelettes/plugins/");
+define('_COULEUR_EMAILS_HTML', '#005b7b');
 
 function autoriser_transaction_facturer_dist($faire, $type, $id, $qui, $opt) {
 
