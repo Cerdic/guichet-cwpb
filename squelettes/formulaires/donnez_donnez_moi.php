@@ -4,19 +4,19 @@ if (!defined("_ECRIRE_INC_VERSION")) return;
 
 include_spip('formulaires/regler_facture_doli');
 
-function formulaires_donnez_donnez_moi_charger_dist() {
+function formulaires_donnez_donnez_moi_charger_dist($montant='', $raison='') {
 
 	$valeurs = array(
 		'name' => '',
 		'email' => '',
-		'montant_don' => '',
-		'raison' => '',
+		'montant_don' => $montant,
+		'raison' => $raison,
 	);
 
 	return $valeurs;
 }
 
-function formulaires_donnez_donnez_moi_verifier_dist() {
+function formulaires_donnez_donnez_moi_verifier_dist($montant='', $raison='') {
 
 	$erreurs = array();
 
@@ -35,7 +35,7 @@ function formulaires_donnez_donnez_moi_verifier_dist() {
 	return $erreurs;
 }
 
-function formulaires_donnez_donnez_moi_traiter_dist() {
+function formulaires_donnez_donnez_moi_traiter_dist($montant='', $raison='') {
 
 	$res = array(
 		'editable' => true,
