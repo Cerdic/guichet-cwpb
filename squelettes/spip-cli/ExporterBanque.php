@@ -62,7 +62,7 @@ class ExporterBanque extends Command {
 		foreach($rows as $row) {
 
 			$date = date('d/m/Y',strtotime($row['date_paiement']));
-			$piece = "";
+			$piece = "Transaction #" . $row['id_transaction'];
 			$libelle = trim($row['contenu']);
 
 			// Le compte à utiliser est le 754000 pour le café et le 754100 pour les autres
@@ -81,7 +81,7 @@ class ExporterBanque extends Command {
 				$libelle .= " $nom";
 
 			}
-			$libelle .= " [Transaction #".$row['id_transaction']."]";
+			$libelle .= " $code_compta [$piece]";
 
 			$debit = '';
 			$credit = str_replace(".",",", sprintf("%.2f", $row['montant_regle']));
