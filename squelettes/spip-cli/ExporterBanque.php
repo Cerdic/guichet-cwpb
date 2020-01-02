@@ -23,9 +23,9 @@ class ExporterBanque extends Command {
 			->addOption(
 				'withoutheaders',
 				1,
-				InputOption::VALUE_OPTIONAL,
+				InputOption::VALUE_NONE,
 				'Pas de headers',
-				''
+				null
 			)
 		;
 	}
@@ -45,8 +45,8 @@ class ExporterBanque extends Command {
 			$t = strtotime(date('Y-m-28 00:00:00', $t)) + 7 * 24 * 3600;
 			$first_day_of_month = date('Y-m-01 00:00:00', $t);
 		}
-		$headersoption = $input->getOption('withoutheaders');
-		var_dump($headersoption);
+
+		$withoutheadersoption = $input->getOption('withoutheaders');
 
 		$month_export = date('Y-m', strtotime($first_day_of_month)-7200);
 
@@ -89,7 +89,11 @@ class ExporterBanque extends Command {
 			$ecritures[] = [$date, $libelle, $debit, $credit, $code_compta, $piece];
 		}
 
-		$csv = $this->exporter_csv('', $ecritures, ';', $header);
+		$csv = "";
+		if ($ecritures or !$withoutheadersoption) {
+			$csv = $this->exporter_csv('', $ecritures, ';', $withoutheadersoption ? null : $header);
+
+		}
 		$output->writeln($csv);
 	}
 
