@@ -17,8 +17,15 @@ class ExporterBanque extends Command {
 				'date',
 				null,
 				InputOption::VALUE_REQUIRED,
-				'date',
+				'Mois de l\'export',
 				null
+			)
+			->addOption(
+				'withoutheaders',
+				1,
+				InputOption::VALUE_OPTIONAL,
+				'Pas de headers',
+				''
 			)
 		;
 	}
@@ -38,6 +45,8 @@ class ExporterBanque extends Command {
 			$t = strtotime(date('Y-m-28 00:00:00', $t)) + 7 * 24 * 3600;
 			$first_day_of_month = date('Y-m-01 00:00:00', $t);
 		}
+		$headersoption = $input->getOption('withoutheaders');
+		var_dump($headersoption);
 
 		$month_export = date('Y-m', strtotime($first_day_of_month)-7200);
 
