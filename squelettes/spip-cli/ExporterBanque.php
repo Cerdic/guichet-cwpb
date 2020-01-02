@@ -58,7 +58,7 @@ class ExporterBanque extends Command {
 
 			// Le compte à utiliser est le 754000 pour le café et le 754100 pour les autres
 			$code_compta = "754100";
-			if (preg_match(",\b(cafes?|cafés?)\b,Uims", $libelle)) {
+			if (preg_match(",\b(cafes?|cafés?|caf..?s?)\b,Uims", $libelle)) {
 				$code_compta = "754000";
 			}
 
@@ -80,8 +80,67 @@ class ExporterBanque extends Command {
 			$ecritures[] = [$date, $libelle, $debit, $credit, $code_compta, $piece];
 		}
 
-		$exporter_csv = charger_fonction('exporter_csv', 'inc');
-		$csv = $exporter_csv('', $ecritures, ';', $header);
+		$csv = exporter_csv('', $ecritures, ';', $header);
 		$output->writeln($csv);
 	}
+
+
+	/**
+	 * Exporte une ressource sous forme de fichier CSV
+	 *
+	 * La ressource peut etre un tableau ou une resource SQL issue d'une requete
+	 * L'extension est choisie en fonction du delimiteur :
+	 * - si on utilise ',' c'est un vrai csv avec extension csv
+	 * - si on utilise ';' ou tabulation c'est pour E*cel, et on exporte en iso-truc, avec une extension .xls
+	 *
+	 * @uses exporter_csv_ligne()
+	 *
+	 * @param string $titre
+	 *   titre utilise pour nommer le fichier
+	 * @param array|resource $resource
+	 * @param string $delim
+	 *   delimiteur
+	 * @param array $entetes
+	 *   tableau d'en-tetes pour nommer les colonnes (genere la premiere ligne)
+	 * @param bool $envoyer
+	 *   pour envoyer le fichier exporte (permet le telechargement)
+	 * @return string
+	 */
+	protected function exporter_csv($filename, $resource, $delim = ', ', $entetes = null) {
+
+		include_spip('inc/exporter');
+		if ($delim == 'TAB') {
+			$delim = "\t";
+		}
+		if (!in_array(trim($delim), array(',', ';', "\t"))) {
+			$delim = ',';
+		}
+
+		if ($filename) {
+			if ($delim == ',') {
+				$extension = 'csv';
+			} else {
+				$extension = 'xls';
+			}
+			$filename = "$filename.$extension";
+		}
+
+		$output = "";
+		if ($entetes and is_array($entetes) and count($entetes)) {
+			$output .= exporter_csv_ligne($entetes, $delim);
+		}
+		while ($row = array_shift($resource)) {
+			$output .= exporter_csv_ligne($row, $delim);
+		}
+
+		if ($filename) {
+			file_put_contents($filename, $output);
+			return $filename;
+		}
+
+		return $output;
+	}
+
 }
+
+
