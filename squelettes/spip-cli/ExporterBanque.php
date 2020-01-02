@@ -67,7 +67,7 @@ class ExporterBanque extends Command {
 
 			// Le compte à utiliser est le 754000 pour le café et le 754100 pour les autres
 			$code_compta = "754100";
-			if (preg_match(",\b(cafes?|cafés?|caf..?s?)\b,Uims", $libelle)) {
+			if (preg_match(",\b(cafes?|cafés?|caf..?s?)\b,Uimsu", $libelle)) {
 				$code_compta = "754000";
 			}
 
