@@ -8,7 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\ProgressHelper;
 
 
-class IndexerObjet extends Command {
+class ExporterBanque extends Command {
 	protected function configure() {
 		$this
 			->setName('exporter:banque')
