@@ -108,7 +108,7 @@ class ExporterBanque extends Command {
 	 */
 	protected function exporter_csv($filename, $resource, $delim = ', ', $entetes = null) {
 
-		include_spip('inc/exporter');
+		include_spip('inc/exporter_csv');
 		if ($delim == 'TAB') {
 			$delim = "\t";
 		}
