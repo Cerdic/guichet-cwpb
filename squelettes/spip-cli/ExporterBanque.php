@@ -80,7 +80,7 @@ class ExporterBanque extends Command {
 			$ecritures[] = [$date, $libelle, $debit, $credit, $code_compta, $piece];
 		}
 
-		$csv = exporter_csv('', $ecritures, ';', $header);
+		$csv = $this->exporter_csv('', $ecritures, ';', $header);
 		$output->writeln($csv);
 	}
 
