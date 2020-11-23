@@ -138,13 +138,26 @@ function dolibarr_connect() {
  */
 function dolibarr_renseigne_societe(&$societe, $soc_infos) {
 	$modif = false;
+
+
+
+	$pays = array (
+		'FR'=> 1,
+		'BE'=>2,
+		'CN'=>9,
+		'US'=>11,
+		'LU'=>140,
+		'DE'=>5,
+		'CA'=>14);
+
+
 	$infos = array(
 		'name' => trim(($soc_infos['societe'] ? $soc_infos['societe'] . " - " : '') . $soc_infos['nom'] . " " . $soc_infos['prenom']),
 		'email' => $soc_infos['email'],
 		'address' => trim($soc_infos['adresse'] . "\n" . $soc_infos['complement_adresse'] . "\n" . $soc_infos['boite_postale']),
 		'zip' => $soc_infos['code_postal'],
 		'town' => $soc_infos['ville'],
-		'country_code' => $soc_infos['pays'],
+		'country_id' => $pays[$soc_infos['pays']],
 		'phone' => $soc_infos['tel_fixe'],
 		'url' => $soc_infos['site'],
 	);
@@ -234,7 +247,7 @@ function dolibarr_societe_modifier($socid, $soc) {
  *                          'total_ttc' => 240,
  *                          'libelle' => "Hello world"
  *
- * @return int
+ * @return bool|array
  */
 
 function dolibarr_facture_inserer($socid, $lignes) {
@@ -272,6 +285,13 @@ function dolibarr_facture_inserer($socid, $lignes) {
 		$line1->total_ttc = $ligne['total_ttc'];
 		$line1->desc = $ligne['libelle'];
 		$line1->fk_product = $ligne['id_produit'];
+
+		if (!empty($ligne['date_debut'])) {
+			$line1->date_start = $ligne['date_debut'];
+		}
+		if (!empty($ligne['date_fin'])) {
+			$line1->date_end = $ligne['date_fin'];
+		}
 
 		$facture->lines[] = $line1;
 	}
@@ -421,6 +441,13 @@ function dolibarr_recuperer_facture($factid, $factref = '') {
 	return $facture;
 }
 
+function doli_normaliser_montant_decimal($montant) {
+	$montant = str_replace(',', '.', $montant);
+	$montant = intval(round($montant * 100)) / 100;
+	$montant = str_replace(',', '.', $montant);
+	return $montant;
+}
+
 
 function dolibarr_importer_facture_en_base_spip($factid, $factref = '') {
 	$connexion = dolibarr_connect();
@@ -440,16 +467,16 @@ function dolibarr_importer_facture_en_base_spip($factid, $factref = '') {
 	}
 
 	$reference = $facture->ref;
-	$fact_ttc = $facture->total_ttc;
-	$fact_ht = $facture->total_ht;
-	$fact_tva = $facture->total_tva;
+	$fact_ttc = doli_normaliser_montant_decimal($facture->total_ttc);
+	$fact_ht = doli_normaliser_montant_decimal($facture->total_ht);
+	$fact_tva = doli_normaliser_montant_decimal($facture->total_tva);
 
 	// Si la facture existe dans spip_factures, on verifie que les montant sont OK et on retourne
 	if ($facture_spip = sql_fetsel('*','spip_factures', 'no_comptable='.sql_quote($reference, '', 'text'))){
 		$id_facture = $facture_spip['id_facture'];
 		if (
-			intval(round(str_replace(',','.',$facture_spip['montant_ht'])*100))!==intval(round($fact_ht*100))
-			or intval(round(str_replace(',','.',$facture_spip['montant'])*100))!==intval(round($fact_ttc*100))
+			intval(round($facture_spip['montant_ht']*100)) !==intval(round($fact_ht*100))
+			or intval(round($facture_spip['montant']*100)) !==intval(round($fact_ttc*100))
 
 		){
 			spip_log("inserer_facture_importer_en_base_spip : $reference dans dolibarr et id_facture=$id_facture ont des montants differents", "doli"._LOG_ERREUR);
@@ -506,9 +533,9 @@ function dolibarr_importer_facture_en_base_spip($factid, $factref = '') {
 	$details = "";
 	foreach ($facture->lines as $line){
 		$s = "<td class='produit'>" . $line->desc . "</td>\n";
-		$s .= "<td class='prix_ht'>" . $line->total_ht . "</td>\n";
-		$s .= "<td class='tva'>" . $line->total_tva . "</td>\n";
-		$s .= "<td class='prix_ttc'>" . $line->total_ttc . "</td>\n";
+		$s .= "<td class='prix_ht'>" . round($line->total_ht,2) . "</td>\n";
+		$s .= "<td class='tva'>" . round($line->total_tva, 2) . "</td>\n";
+		$s .= "<td class='prix_ttc'>" . round($line->total_ttc, 2) . "</td>\n";
 		$s = "<tr>\n$s\n</tr>";
 		$details .= "$s\n";
 	}
@@ -544,8 +571,8 @@ function dolibarr_importer_facture_en_base_spip($factid, $factref = '') {
 	$set = array(
 		'id_auteur' => $id_auteur,
 		'no_comptable' => $reference,
-		'montant_ht' => str_replace(',','.', round($fact_ht,2)),
-		'montant' => str_replace(',','.', round($fact_ttc, 2)),
+		'montant_ht' => $fact_ht,
+		'montant' => $fact_ttc,
 		'date' => $fact_date,
 		'client' => $client,
 		'details' => $details,
