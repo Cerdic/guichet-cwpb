@@ -6,6 +6,7 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 
 	'info_formulaire_adhesion' => 'Pour adhérer vous devez remplir le formulaire d\'adhésion papier avec un <a href="https://fr.wikipedia.org/wiki/Stylo">stylo</a>.
 <br />Pour récupérer un formulaire, demandez à un cotre coworker, ça sera l\'occasion de faire connaissance :)',
+	'info_formulaire_adhesion_download' => 'Pour adhérer vous devez remplir <a href="@url@">le formulaire d\'adhésion</a> et le renvoyer à l\'adresse mail qui y est indiquée',
 
 	'label_name' => 'Mon nom',
 	'placeholder_name' => 'Camille Moulin',

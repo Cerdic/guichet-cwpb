@@ -13,7 +13,11 @@
 <h2 id="adherer"><:guichet:titre_payer_adhesion:></h2>
 
 <p class="small alert alert-warning">
-<:adherez:info_formulaire_adhesion:>
+	<BOUCLE_form(DOCUMENTS){extension=pdf}{credit=adhesion}>
+		<:adherez:info_formulaire_adhesion_download{url=#URL_DOCUMENT}:>
+	</BOUCLE_form>
+		<:adherez:info_formulaire_adhesion:>
+	<//B_form>
 </p>
 
 #FORMULAIRE_PAYER_ADHESION
