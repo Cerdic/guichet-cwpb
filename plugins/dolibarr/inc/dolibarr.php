@@ -297,6 +297,8 @@ function dolibarr_facture_inserer($socid, $lignes) {
 	}
 
 	// Create invoice
+	// passer en lang en car sinon l'update du prix global de la facture plante a cause d'un cast float
+	setlocale( LC_NUMERIC, 'en_US.UTF-8');
 	$idobject = $facture->create($user);
 	if ($idobject > 0) {
 		// Change status to validated
@@ -304,6 +306,7 @@ function dolibarr_facture_inserer($socid, $lignes) {
 		if ($result > 0) {
 			$db->commit();
 
+			setlocale( LC_NUMERIC, 'fr_FR');
 			return array(
 				'reference' => $facture->ref,
 				'id' => $idobject,
@@ -312,6 +315,7 @@ function dolibarr_facture_inserer($socid, $lignes) {
 		}
 	}
 
+	setlocale( LC_NUMERIC, 'fr_FR');
 	spip_log('doli_facture_inserer : erreur ' . $facture->error, 'dolibarr' . _LOG_ERREUR);
 	if ($db->lastqueryerror) {
 		spip_log($db->lasterrno.' : '.$db->lasterror."\n".$db->lastqueryerror, 'dolibarr' . _LOG_ERREUR);
@@ -390,6 +394,8 @@ function dolibarr_facture_payer($factid, $data) {
 		$paiement->paiementid = $data['type_paiement'];
 		$paiement->num_paiement = $data['libelle'];    // Numero du CHQ, VIR, etc...
 
+		// passer en lang en car sinon l'update du prix global de la facture plante a cause d'un cast float
+		setlocale( LC_NUMERIC, 'en_US.UTF-8');
 		if ($id_paiement = $paiement->create($user)>0) {
 		  $id_bank_line = $paiement->addPaymentToBank($user, "payment", "", $data['id_bank'], "", "");
 		  if ($id_bank_line) {
@@ -398,10 +404,12 @@ function dolibarr_facture_payer($factid, $data) {
 				$facture = new Facture($db);
 				$facture->fetch($factid);
 				$facture->set_paid($user);
+			  setlocale( LC_NUMERIC, 'fr_FR');
 			  return $id_paiement;
 		  }
 		}
 
+		setlocale( LC_NUMERIC, 'fr_FR');
 		spip_log('doli_facture_payer : erreur ' . $paiement->error, 'dolibarr' . _LOG_ERREUR);
 		if ($db->lastqueryerror) {
 			spip_log($db->lasterrno.' : '.$db->lasterror."\n".$db->lastqueryerror, 'dolibarr' . _LOG_ERREUR);
