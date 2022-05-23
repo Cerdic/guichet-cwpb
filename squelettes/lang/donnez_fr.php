@@ -20,5 +20,9 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 	'titre_mail_merci' => "Merci !",
 	'detail_recu_don' => "Les détails de ton don, pour mémoire :",
 	'don_recu_le' => "Don reçu le ",
+
+	'sujet_mail_admin' => "Une nouvelle adhésion !",
+	'titre_mail_merci_admin' => "Plus on est de fous plus on rit :)",
+
 );
 

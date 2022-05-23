@@ -1,0 +1,25 @@
+<BOUCLE_trans(TRANSACTIONS){id_transaction}{statut=ok}{tout}>
+<title>\[#NOM_SITE_SPIP\] <:donnez:sujet_mail_admin:> #MONTANT</title>
+
+<body>
+<div class="header">
+<h1><:donnez:titre_mail_merci_admin:></h1>
+</div>
+
+<p>
+	Une nouveau don dans la poche :
+</p>
+<ul class="spip">
+	<li>#AUTEUR</li>
+	<li>[(#CONTENU)]</li>
+	<li>[(#MONTANT|affiche_monnaie)]</li>
+	<li><:donnez:don_recu_le:>[ (#DATE_PAIEMENT|affdate)] [ (#DATE_PAIEMENT|heures_minutes)]</li>
+	<li><:bank:titre_transaction:> ##ID_TRANSACTION</li>
+</ul>
+
+
+<hr />
+
+</body>
+</BOUCLE_trans>
+#FILTRE{facteur_email_wrap_to_html}
