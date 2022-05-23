@@ -69,9 +69,9 @@ function inserer_transaction_don($name, $email, $montant, $raison, $mobile = '')
 	$options = array(
 		'montant_ht' => $montant,
 		'parrain' => 'don',
-		'auteur' => trim("$name $email $mobile"),
+		'auteur' => trim("$name $email"),
 		'champs' => array(
-			'contenu' => "DON $raison",
+			'contenu' => trim("DON $raison $mobile"),
 		),
 	);
 	$id_transaction = $inserer_transaction($montant, $options);
