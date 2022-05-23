@@ -97,7 +97,7 @@ function guichet_trig_bank_notifier_reglement($flux) {
 		}
 
 		if ($what === 'don'
-		  && strpos($flux['args']['contenu'], '10 ans') !== false // notif pour la soiree des 10 ans
+		  && strpos($flux['args']['row']['contenu'], '10 ans') !== false // notif pour la soiree des 10 ans
 		  && defined('_GUICHET_EMAIL_NOTIF_REGLEMENT_10ANS')) {
 			lang_select('fr');
 			$texte = recuperer_fond('notifications/email_reglement_' . $what."_admin", array('id_transaction' => $id_transaction));
