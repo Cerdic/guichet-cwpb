@@ -79,20 +79,28 @@ body {
   }
 
   #nav {
-    @include media-breakpoint-down(xs) {
-      display: none;
+    @media (max-width: 28rem) {
+      .navbar-nav {
+        flex-direction: column;
+        width: 100%;
+      }
     }
     margin-top: $rem-vert-margin;
     margin-bottom: -1 * $rem-vert-margin;
     background: $secondary;
     .navbar-collapse {
       margin-left: -1rem;
+      margin-right: -1rem;
     }
     a {
       @include link-nav($gray-200, $white) {
         text-decoration: none;
         background-color: $primary;
       }
+    }
+    &.navbar-expand > .container {
+      padding-left: 0.5 * $grid-gutter-width;
+      padding-right: 0.5 * $grid-gutter-width;
     }
   }
 }
