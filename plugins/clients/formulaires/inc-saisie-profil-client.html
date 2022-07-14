@@ -1,0 +1,18 @@
+
+    #SET{fl,clients}
+	<fieldset>
+		<legend><:clients:label_auteur_coordonnees:></legend>
+		<ul>
+			[(#SAISIE{input, name,	label=<:clients:label_auteur_name:>})]
+			[(#SAISIE{input, prenom,	label=<:clients:label_auteur_prenom:>})]
+			[(#SAISIE{input, societe,	label=<:clients:label_auteur_societe:>})]
+			[(#SAISIE{input, adresse_1, label=<:clients:label_auteur_adresse_1:>})]
+			[(#SAISIE{input, adresse_2, label=<:clients:label_auteur_adresse_2:>})]
+			[(#SAISIE{input, adresse_bp, label=<:clients:label_auteur_adresse_bp:>})]
+			[(#SAISIE{input, adresse_cp, label=<:clients:label_auteur_adresse_cp:>})]
+			[(#SAISIE{input, adresse_ville, label=<:clients:label_auteur_adresse_ville:>})]
+			[(#SAISIE{pays, adresse_pays, code_pays=oui, label=<:clients:label_auteur_adresse_pays:>,defaut=FR})]
+			[(#SAISIE{input, tel_fixe, label=<:clients:label_auteur_tel_fixe:>})]
+			[(#SAISIE{input, tel_mobile, label=<:clients:label_auteur_tel_mobile:>})]
+		</ul>
+	</fieldset>

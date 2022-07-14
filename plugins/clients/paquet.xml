@@ -1,0 +1,20 @@
+<paquet
+	prefix="clients"
+	categorie="outil"
+	version="0.1.0"
+	etat="test"
+	compatibilite="];["
+	logo="prive/themes/spip/images/client-32.png"
+	schema="0.1.0"
+>	
+
+	<nom>Clients</nom>
+	<!-- Comptes clients -->
+
+	<pipeline nom="declarer_tables_objets_sql" inclure="clients_administrations.php" />
+	<pipeline nom="recuperer_fond" inclure="clients_pipelines.php" />
+	<pipeline nom="bank_dsp2_renseigner_facturation" inclure="clients_pipelines.php" />
+
+	<necessite nom="saisies" compatibilite="];[" />
+	<necessite nom="pays" compatibilite="];[" />
+</paquet>

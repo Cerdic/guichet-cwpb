@@ -1,0 +1,73 @@
+<BOUCLE_afficher_contenu(AUTEURS){id_auteur=#ENV{id}}{statut?}>
+<div class="champ contenu_nom[ (#NOM*|strlen|?{'',vide})]">
+<div class='label'><:info_nom:></div>
+<div dir='#LANG_DIR' class='#EDIT{nom} nom'>#NOM</div>
+</div>
+<div class="champ contenu_nom_site[ (#NOM_SITE*|sinon{#URL_SITE*}|strlen|?{'',vide})]">
+<div class='label'><:info_site_2:></div>
+<div dir='#LANG_DIR' class='#EDIT{hyperlien} nom_site'>[<a href='(#URL_SITE)'>][(#NOM_SITE|sinon{<:info_site:>})][(#URL_SITE|oui)</a>]</div>
+</div>
+<div class="champ contenu_bio[ (#BIO*|strlen|?{'',vide})]">
+<div class='label'><:info_bio:></div>
+<div dir='#LANG_DIR' class='#EDIT{bio} bio'>[(#BIO|image_reduire{500,0})]</div>
+</div>
+<div class="champ contenu_pgp[ (#PGP*|strlen|?{'',vide})]">
+<div class='label'>PGP</div>
+<div dir='#LANG_DIR' class='#EDIT{pgp} pgp'>[<code>(#PGP|image_reduire{500,0})</code>]</div>
+</div>
+<address>
+	<div class="champ contenu_name[ (#NAME*|strlen|?{'',vide})]">
+	<div class='label'><:info_nom:></div>
+	<div dir='#LANG_DIR' class='#EDIT{name} name'>#NAME</div>
+	</div>
+	<div class="champ contenu_prenom[ (#PRENOM*|strlen|?{'',vide})]">
+	<div class='label'><:clients:info_prenom:></div>
+	<div dir='#LANG_DIR' class='#EDIT{prenom} prenom'>#PRENOM</div>
+	</div>
+	<div class="champ contenu_email[ (#EMAIL*|strlen|?{'',vide})]">
+	<div class='label'><:email_2:></div>
+	<div dir='#LANG_DIR' class='#EDIT{email} email'><a href='mailto:[(#EMAIL|htmlspecialchars)]'>#EMAIL</a></div>
+	</div>
+	<div class="champ contenu_societe[ (#SOCIETE*|strlen|?{'',vide})]">
+	<div class='label'><:clients:info_societe:></div>
+	<div dir='#LANG_DIR' class='#EDIT{societe} societe'>#SOCIETE</div>
+	</div>
+	<div class="champ contenu_adresse_1[ (#ADRESSE_1*|strlen|?{'',vide})]">
+	<div class='label'><:clients:info_adresse:></div>
+	<div dir='#LANG_DIR' class='#EDIT{adresse_1} adresse_1'>#ADRESSE_1</div>
+	</div>
+	<div class="champ contenu_adresse_2[ (#ADRESSE_2*|strlen|?{'',vide})]">
+	<div class='label'><:clients:info_adresse:></div>
+	<div dir='#LANG_DIR' class='#EDIT{adresse_2} adresse_2'>#ADRESSE_2</div>
+	</div>
+	<div class="champ contenu_adresse_bp[ (#ADRESSE_BP*|strlen|?{'',vide})]">
+	<div class='label'><:clients:info_adresse_bp:></div>
+	<div dir='#LANG_DIR' class='#EDIT{adresse_bp} adresse_bp'>#ADRESSE_BP</div>
+	</div>
+
+	<div class="champ contenu_adresse_ville[ (#ADRESSE_VILLE*|strlen|?{'',vide})]">
+	<div class='label'><:clients:info_adresse_ville:></div>
+	<div dir='#LANG_DIR'>
+		<span class='#EDIT{adresse_cp} adresse_cp'>#ADRESSE_CP</span>
+		<span class='#EDIT{adresse_ville} adresse_ville'>#ADRESSE_VILLE</span>
+	</div>
+	</div>
+	<div class="champ contenu_adresse_pays[ (#ADRESSE_PAYS*|strlen|?{'',vide})]">
+	<div class='label'><:clients:info_adresse_pays:></div>
+	<div dir='#LANG_DIR' class='#EDIT{adresse_pays} adresse_pays'>#ADRESSE_PAYS</div>
+	</div>
+	<div class="champ contenu_tel_fixe[ (#TEL_FIXE*|strlen|?{'',vide})]">
+	<div class='label'><:clients:info_telephone:></div>
+	<div dir='#LANG_DIR' class='#EDIT{tel_fixe} tel_fixe'>#TEL_FIXE</div>
+	</div>
+	<div class="champ contenu_tel_mobile[ (#TEL_MOBILE*|strlen|?{'',vide})]">
+	<div class='label'><:clients:info_telephone:></div>
+	<div dir='#LANG_DIR' class='#EDIT{tel_mobile} tel_mobile'>#TEL_MOBILE</div>
+	</div>
+</address>
+
+[<div class="champ contenu_notes">
+<div class='label'><:info_notes:></div>
+<div dir='#LANG_DIR' class='#EDIT{notes} notes'>(#NOTES)</div>
+</div>]
+</BOUCLE_afficher_contenu>
