@@ -140,16 +140,11 @@ function dolibarr_renseigne_societe(&$societe, $soc_infos) {
 	$modif = false;
 
 
-
-	$pays = array (
-		'FR'=> 1,
-		'BE'=>2,
-		'CN'=>9,
-		'US'=>11,
-		'LU'=>140,
-		'DE'=>5,
-		'CA'=>14);
-
+	$country_id = 0;
+	$doli_country = getCountry($soc_infos['pays'], 'all');
+	if (!empty($doli_country['id'])) {
+		$country_id = $doli_country['id'];
+	}
 
 	$infos = array(
 		'name' => trim(($soc_infos['societe'] ? $soc_infos['societe'] . " - " : '') . $soc_infos['nom'] . " " . $soc_infos['prenom']),
@@ -157,7 +152,7 @@ function dolibarr_renseigne_societe(&$societe, $soc_infos) {
 		'address' => trim($soc_infos['adresse'] . "\n" . $soc_infos['complement_adresse'] . "\n" . $soc_infos['boite_postale']),
 		'zip' => $soc_infos['code_postal'],
 		'town' => $soc_infos['ville'],
-		'country_id' => $pays[$soc_infos['pays']],
+		'country_id' => $country_id,
 		'phone' => $soc_infos['tel_fixe'],
 		'url' => $soc_infos['site'],
 	);
@@ -174,10 +169,10 @@ function dolibarr_renseigne_societe(&$societe, $soc_infos) {
 
 /**
  * Inserer un nouveau client
- * @param $soc array
+ * @param $client array
  * @return int|bool
  */
-function dolibarr_societe_inserer($soc) {
+function dolibarr_societe_inserer($client) {
 	$connexion = dolibarr_connect();
 	$db = &$connexion['db'];
 	$user = &$connexion['user'];
@@ -186,7 +181,7 @@ function dolibarr_societe_inserer($soc) {
 
 	// Start of transaction
 	$societe = new Societe ($db);
-	dolibarr_renseigne_societe($societe, $soc);
+	dolibarr_renseigne_societe($societe, $client);
 
 	$monsocid = $societe->create($user);
 	if ($monsocid > 0) {
@@ -207,10 +202,10 @@ function dolibarr_societe_inserer($soc) {
 /**
  * Mettre a jour un client existant
  * @param $socid int
- * @param $soc array
+ * @param $client array
  * @return int|bool
  */
-function dolibarr_societe_modifier($socid, $soc) {
+function dolibarr_societe_modifier($socid, $client) {
 	$connexion = dolibarr_connect();
 	$db = &$connexion['db'];
 	$user = &$connexion['user'];
@@ -220,7 +215,7 @@ function dolibarr_societe_modifier($socid, $soc) {
 	require_once(DOL_DOCUMENT_ROOT . "/compta/facture/class/facture.class.php");
 	$societe = new Societe ($db);
 	$societe->fetch($socid);
-	if (dolibarr_renseigne_societe($societe, $soc)) {
+	if (dolibarr_renseigne_societe($societe, $client)) {
 		$societe->update($socid, $user);
 		if ($societe->error) {
 			spip_log('doli_societe_modifier : erreur ' . $societe->error . "\n", 'dolibarr' . _LOG_ERREUR);

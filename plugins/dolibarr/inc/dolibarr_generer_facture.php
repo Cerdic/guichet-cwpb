@@ -59,9 +59,10 @@ function dolibarr_actualiser_societe($id_auteur) {
  * Generer la facture dans dolibarr
  * @param $id_facture int
  * @param $facture array
+ * @param $items array
  * @return mixed
  */
-function dolibarr_generer_facture($id_facture, $facture) {
+function dolibarr_generer_facture($id_facture, $facture, $items) {
 
 	$socid = dolibarr_actualiser_societe($facture['id_auteur']);
 	if (!$socid) {
@@ -73,40 +74,26 @@ function dolibarr_generer_facture($id_facture, $facture) {
 
 	$transaction = sql_fetsel('*','spip_transactions','id_facture='.intval($id_facture));
 	//spip_log('transaction : '.var_export($transaction, true),'dolibarr');
-	$items = paniers_explique_cookie($transaction['contenu']);
-	//spip_log('items : '.var_export($items, true),'dolibarr');
+
 	foreach ($items as $item) {
 
-		$taux_tva = 0;
-		if (intval($item['net_price'] * 100)) {
-			$taux_tva = round(($item['gross_price'] - $item['net_price']) / $item['net_price'] * 100,1);
+		$taux_tva = $item['taux_tva'] ?? 0;
+		if (empty($item['taux_tva'])) {
+			if (intval($item['net_price'] * 100)) {
+				$taux_tva = round(($item['gross_price'] - $item['net_price']) / $item['net_price'] * 100,1);
+			}
 		}
 
-		// TODO : code generique
 		$ligne = array(
-			'id_produit' => 2, // produit hebergement par defaut
+			'id_produit' => $item['id_produit'],
 			'quantite' => $item['quantity'],
 			'prix_unitaire' => round($item['net_price'] / $item['quantity'],2),
 			'taux_tva' => $taux_tva,
 			'total_ht' => $item['net_price'],
 			'total_tva' => $item['gross_price'] - $item['net_price'],
 			'total_ttc' => $item['gross_price'],
-			'libelle' => '',
+			'libelle' => $item['description'],
 		);
-
-		$texte = "";
-		if ($item['id_syndic'] and $url = generer_info_entite($item['id_syndic'], 'site', 'url_site')) {
-			$texte = $url."<br />\n";
-		}
-		$date_echeance = date_echeance_contextuelle($item['id_syndic'], $item['id'], $item['quantity']);
-		$texte .= affiche_produit_clair($item['id'], $item['quantity'], $item['id_syndic'], $date_echeance);
-		$ligne['libelle'] = $texte;
-
-		// produits qui ne sont pas de l'hebergement
-		$produit = array('forfmigration' => 6, 'forfdns' => 6, 'ndd' => 9);
-		if (isset($produit[$item['id']])) {
-			$ligne['id_produit'] = $produit[$item['id']];
-		}
 
 		$lignes[] = $ligne;
 

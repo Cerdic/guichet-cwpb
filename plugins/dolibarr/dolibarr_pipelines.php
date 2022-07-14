@@ -57,8 +57,13 @@ function dolibarr_post_insertion($flux) {
 
 		include_spip('inc/dolibarr_generer_facture');
 		$facture = $flux['data'];
-		// TODO
-		// $flux['data'] = dolibarr_generer_facture($id_facture, $facture);
+
+		if ($transaction = sql_fetsel('*','spip_transactions','id_facture='.intval($id_facture))
+		  and $transaction['parrain'] === 'achatdoli'
+		  and !empty($transaction['contenu'])
+		  and $items = json_decode($transaction['contenu'], true)) {
+			$flux['data'] = dolibarr_generer_facture($id_facture, $facture, $items);
+		}
 
 	}
 
