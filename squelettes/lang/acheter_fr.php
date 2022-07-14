@@ -18,5 +18,11 @@ $GLOBALS[$GLOBALS['idx_lang']] = array(
 
 	'bouton_acheter' => 'Passer à la caisse',
 
+
+	'sujet_mail_confirm' => "Nous avons bien reçu ton paiement",
+	'titre_mail_merci' => "Et voilà !",
+	'detail_recu_achat' => "Les détails de votre achat, pour mémoire :",
+	'paiement_recu_le' => "Paiement reçu le ",
+
 );
 

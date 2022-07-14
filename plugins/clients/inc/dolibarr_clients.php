@@ -39,6 +39,7 @@ function dolibarr_trouver_ou_creer_client($nom, $email, $infos) {
 		}
 	}
 	if (!empty($set)) {
+		include_spip('inc/autoriser');
 		include_spip('action/editer_auteur');
 		autoriser_exception('modifier', 'auteur', $id_auteur);
 		auteur_modifier($id_auteur, $set);

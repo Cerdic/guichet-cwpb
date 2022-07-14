@@ -74,19 +74,30 @@ function guichet_bank_description_transaction($flux) {
 
 function guichet_trig_bank_notifier_reglement($flux) {
 	if ($id_transaction = $flux['args']['id_transaction']
-	  AND in_array($flux['args']['row']['parrain'], ['don', 'adhesion'])
-	  AND $auteur = $flux['args']['row']['auteur']){
+	  AND in_array($flux['args']['row']['parrain'], ['don', 'adhesion', 'achatdoli'])
+	  ){
 
 		$what = $flux['args']['row']['parrain'];
-		$auteur = explode(' ', $auteur);
-		$email = array_pop($auteur);
-		$texte = recuperer_fond('notifications/email_reglement_' . $what, array('id_transaction' => $id_transaction));
+
+		$email = '';
+		if ($id_auteur = $flux['args']['row']['id_auteur']) {
+			$email = sql_getfetsel('email', 'spip_auteurs', 'id_auteur='.intval($id_auteur));
+		}
+		elseif($auteur = $flux['args']['row']['auteur']) {
+			$auteur = explode(' ', $auteur);
+			$email = array_pop($auteur);
+		}
 
 		include_spip('inc/config');
 		$from = lire_config('bank/email_from_ticket_admin', 'administratif@coworking-pb.com');
-
 		include_spip("inc/notifications");
-		notifications_envoyer_mails($email, $texte, '', $from);
+
+		if ($email) {
+			$texte = recuperer_fond('notifications/email_reglement_' . $what, array('id_transaction' => $id_transaction));
+
+			notifications_envoyer_mails($email, $texte, '', $from);
+		}
+
 
 		if ($what === 'adhesion'
 		  && defined('_GUICHET_EMAIL_NOTIF_REGLEMENT_ADHESION')) {

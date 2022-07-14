@@ -1,0 +1,31 @@
+<BOUCLE_trans(TRANSACTIONS){id_transaction}{statut=ok}{tout}>
+<title>\[#NOM_SITE_SPIP\] <:acheter:sujet_mail_confirm:>[ (#MONTANT|affiche_monnaie)]</title>
+
+<body>
+<div class="header">
+<h1><:acheter:titre_mail_merci:></h1>
+	#MESSAGE
+</div>
+
+<p><:acheter:detail_recu_achat:></p>
+<ul class="spip">
+	<li>#INFO_NOM{auteur,#ID_AUTEUR}</li>
+	<li>[(#MONTANT|affiche_monnaie)]
+		<B_contenu>
+			<ul class="spip">
+				<BOUCLE_contenu(DATA){source table,#CONTENU**|json_decode{1}}>
+					<li>
+						#VALEUR{quantity} &times; [(#VALEUR{description})] ([(#VALEUR{gross_price}|bank_affiche_montant)])
+					</li>
+				</BOUCLE_contenu>
+			</ul>
+		</B_contenu>
+	</li>
+	<li><:acheter:paiement_recu_le:>[ (#DATE_PAIEMENT|affdate)] [ (#DATE_PAIEMENT|heures_minutes)]</li>
+	<li><:bank:titre_transaction:> ##ID_TRANSACTION</li>
+</ul>
+<hr />
+
+</body>
+</BOUCLE_trans>
+#FILTRE{facteur_email_wrap_to_html}
