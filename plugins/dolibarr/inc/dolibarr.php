@@ -277,12 +277,12 @@ function dolibarr_facture_inserer($socid, $lignes) {
 
 		$line1 = new FactureLigne($db);
 		$line1->qty = $ligne['quantite'];
-		$line1->subprice = $ligne['prix_unitaire'];
-		$line1->tva_tx = $ligne['taux_tva'];
+		$line1->subprice = price2num($ligne['prix_unitaire']);
+		$line1->tva_tx = price2num($ligne['taux_tva']);
 
-		$line1->total_ht = $ligne['total_ht'];
-		$line1->total_tva = $ligne['total_tva'];
-		$line1->total_ttc = $ligne['total_ttc'];
+		$line1->total_ht = price2num($ligne['total_ht']);
+		$line1->total_tva = price2num($ligne['total_tva']);
+		$line1->total_ttc = price2num($ligne['total_ttc']);
 		$line1->desc = $ligne['libelle'];
 		$line1->fk_product = $ligne['id_produit'];
 
