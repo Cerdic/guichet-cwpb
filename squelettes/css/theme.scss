@@ -154,6 +154,11 @@ body {
       color:$hr-border-color;
     }
   }
+  .cartouche {
+    .publication {
+      display: none;
+    }
+  }
 }
 
 .page_payer-achat,
