@@ -1,0 +1,31 @@
+[(#REM)
+/*
+ * Paiement Bancaire
+ * module de paiement bancaire multi prestataires
+ * stockage des transactions
+ *
+ * Auteurs :
+ * Cedric Morin, Nursit.com
+ * (c) 2012-2018 - Distribue sous licence GNU/GPL
+ *
+ */
+]
+<BOUCLE_payer(TRANSACTIONS){id_transaction}{transaction_hash}>
+	<h1>Je règle mon achat</h1>
+
+	<div class="well-payment">
+		<p>Montant total : <strong>[(#MONTANT|affiche_monnaie)]</strong>
+			<br />De : <strong>#INFO_NOM{auteur,#ID_AUTEUR}</strong> #INFO_EMAIL{auteur,#ID_AUTEUR}
+		</p>
+		<B_contenu>
+			<table class="spip">
+			<BOUCLE_contenu(DATA){source table,#CONTENU**|json_decode{1}}>
+				<tr>
+					<td>#VALEUR{quantity} &times;</td><td>#VALEUR{description}</td><td>[(#VALEUR{gross_price}|bank_affiche_montant)]</td>
+				</tr>
+			</BOUCLE_contenu>
+			</table>
+		</B_contenu>
+		<INCLURE{fond=modeles/payer_acte,id_transaction,transaction_hash,title='Je choisis mon mode de paiement sécurisé'}>
+	</div>
+</BOUCLE_payer>
