@@ -95,6 +95,8 @@ class ExporterBanque extends Command {
 
 		}
 		$output->writeln($csv);
+
+		return Command::SUCCESS;
 	}
 
 
