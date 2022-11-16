@@ -1,7 +1,7 @@
 <div class="row">
 	<div class="col-12">
 		<BOUCLE_annee(ARTICLES){par date}{0,1}>[(#DATE|annee|!={#VAL{Y}|date}|oui)[(#DATE|annee)]]</BOUCLE_annee>-</B_annee>[(#DATE|annee) ] 
-&mdash; [(#DESCRIPTIF_SITE|PtoBR)]<br />
+&mdash; [(#DESCRIPTIF_SITE_SPIP|PtoBR)]<br />
 		<a href="https://www.coworking-pb.com/">Retour au site CWPB</a>
 			<?php
 		if (isset($GLOBALS['visiteur_session']['id_auteur']) AND $GLOBALS['visiteur_session']['id_auteur']) {
