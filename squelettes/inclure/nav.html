@@ -2,21 +2,23 @@
     <span class="navbar-toggler-icon"></span>
   </button>
 
+  #SET{page,''}
+  <BOUCLE_page_exposed(ARTICLES){id_article}>#SET{page,#PAGE}</BOUCLE_page_exposed>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav ml-0 mr-auto">
-      <li class="nav-item">
-        <a class="nav-link" href="#URL_SITE_SPIP">Don</a>
+      <li class="nav-item[(#SI_PAGE{sommaire}|ou{#GET{page}|=={payer}}|oui)active]">
+        <a class="nav-link" href="#URL_SITE_SPIP">Payer</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item[(#GET{page}|=={acheter}|oui)active]">
         <a class="nav-link" href="#URL_PAGE_UNIQUE{acheter}">Acheter</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#URL_PAGE_UNIQUE{payer}">Payer</a>
+      <li class="nav-item[(#GET{page}|=={don}|oui)active]">
+        <a class="nav-link" href="#URL_PAGE_UNIQUE{don}">Don</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item[(#GET{page}|=={adherer}|oui)active]">
         <a class="nav-link" href="#URL_PAGE_UNIQUE{adherer}">Adhésion</a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item[(#GET{page}|=={cafe}|oui)active]">
         <a class="nav-link" href="#URL_PAGE_UNIQUE{cafe}">Café</a>
       </li>
     </ul>

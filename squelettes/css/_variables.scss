@@ -745,6 +745,11 @@ $navbar-light-brand-hover-color:          $navbar-light-active-color !default;
 $navbar-dark-brand-color:                 $navbar-dark-active-color !default;
 $navbar-dark-brand-hover-color:           $navbar-dark-active-color !default;
 
+$navbar-dark-bg:                 transparent !default;
+$navbar-dark-hover-bg:           transparent !default;
+$navbar-dark-active-bg:          $primary !default;
+$navbar-dark-disabled-bg:        transparent !default;
+
 
 // Dropdowns
 //
