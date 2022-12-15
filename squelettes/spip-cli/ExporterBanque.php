@@ -65,7 +65,7 @@ class ExporterBanque extends Command {
 			"parrain='don'"
 		];
 		if ($presta = $input->getOption('presta')) {
-			$where[] = "presta LIKE ".sql_quote("$presta%");
+			$where[] = "mode LIKE ".sql_quote("$presta%");
 		}
 
 		$rows = sql_allfetsel("*", "spip_transactions", $where);
