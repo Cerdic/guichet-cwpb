@@ -54,7 +54,7 @@ function dolibarr_regler_facture($id_transaction) {
 						'date_paiement' => $transaction['date_paiement'],
 						'montant' => $facture['montant_regle'],
 						'type_paiement' => _DOLIBARR_TYPE_PAIEMENT_CB,
-						'id_bank' => _DOLIBARR_ID_BANK_PAIEMENT, /* Banque CA */
+						'id_bank' => _DOLIBARR_ID_BANK_PAIEMENT, /* Banque par defaut */
 						'libelle' => trim($libelle),
 				);
 
@@ -64,10 +64,17 @@ function dolibarr_regler_facture($id_transaction) {
 				if (strncmp($transaction['mode'],'virement',8) == 0) {
 					$paiement['type_paiement'] = _DOLIBARR_TYPE_PAIEMENT_VIREMENT;
 				}
-				if (strncmp($transaction['mode'],'stripe',6) == 0) {
-					$paiement['id_bank'] = _DOLIBARR_ID_BANK_PAIEMENT_STRIPE; /* id Compte Banque Stripe */
+				// un id_bank specifique pour ce presta ?
+				$presta = explode('/', $transaction['mode']);
+				$presta = reset($presta);
+				if (substr($presta, -5) === '_test') {
+					$presta = substr($presta, 0, -5);
 				}
-				//spip_log("paiement $factid ".var_export($paiement,true),'dolibarr');
+				$constant_id_bank = '_DOLIBARR_ID_BANK_PAIEMENT_' . strtoupper($presta);
+				if (defined($constant_id_bank)) {
+					$paiement['id_bank'] = constant($constant_id_bank); /* id Compte Banque Specifique pour ce presta */
+				}
+				//spip_log("paiement $factid presta $presta ".json_encode($paiement),'dolibarr');
 				$id_paiement = dolibarr_facture_payer($factid, $paiement);
 				spip_log("paiement $factid : $id_paiement",'dolibarr');
 
