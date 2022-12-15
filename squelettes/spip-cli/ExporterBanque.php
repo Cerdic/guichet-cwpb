@@ -21,6 +21,13 @@ class ExporterBanque extends Command {
 				null
 			)
 			->addOption(
+				'presta',
+				null,
+				InputOption::VALUE_REQUIRED,
+				'Prestataire de paiement',
+				null
+			)
+			->addOption(
 				'withoutheaders',
 				1,
 				InputOption::VALUE_NONE,
@@ -52,8 +59,16 @@ class ExporterBanque extends Command {
 
 
 		include_spip('base/abstract_sql');
+		$where = [
+			"statut='ok'",
+			"date_paiement LIKE '{$month_export}-%'",
+			"parrain='don'"
+		];
+		if ($presta = $input->getOption('presta')) {
+			$where[] = "presta LIKE ".sql_quote("$presta%");
+		}
 
-		$rows = sql_allfetsel("*", "spip_transactions","statut='ok' AND date_paiement LIKE '{$month_export}-%' AND parrain='don'");
+		$rows = sql_allfetsel("*", "spip_transactions", $where);
 
 		$header = ["Date", "Libelle", "Debit", "Credit", "Code_compta", "No_Piece"];
 		$ecritures = array();
@@ -157,5 +172,3 @@ class ExporterBanque extends Command {
 	}
 
 }
-
-
