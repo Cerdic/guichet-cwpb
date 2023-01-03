@@ -120,3 +120,19 @@ function guichet_trig_bank_notifier_reglement($flux) {
 
 	return $flux;
 }
+
+function bank_stancer_expliquer_reference_transaction($transaction) {
+	if (!empty($transaction['id_facture'])) {
+		$facture_ref = sql_getfetsel('no_comptable', 'spip_factures', 'id_facture=' . intval($transaction['id_facture']));
+	}
+	elseif(!empty($transaction['parrain'])) {
+		if ($transaction['parrain'] === 'don') {
+			$facture_ref = trim($transaction['contenu']);
+		}
+		elseif ($transaction['parrain'] === 'adhesion') {
+			$qui = json_decode($transaction['contenu'], true);
+			$facture_ref = trim("Adhesion " . ($qui['nom'] ?? ''));
+		}
+	}
+	return $facture_ref;
+}
