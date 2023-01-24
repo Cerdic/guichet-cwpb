@@ -39,6 +39,15 @@ function formulaires_acheter_produit_passage_doli_verifier_dist() {
 		}
 	}
 
+	if (empty($erreurs['email'])) {
+		include_spip('inc/filtres');
+		if (!$email = _request('email')
+			or !($email = email_valide($email))
+			or strpos($email, '@') === false) {
+			$erreurs['email'] = _T('info_email_invalide');
+		}
+	}
+
 	if (empty($erreurs['produit_id'])) {
 		include_spip('inc/dolibarr_cwpb');
 		$produits = dolibarr_lister_produits(_PRODUITS_PASSAGE_ACHETABLES);
@@ -90,4 +99,3 @@ function formulaires_acheter_produit_passage_doli_traiter_dist() {
 
 	return $res;
 }
-

@@ -32,6 +32,15 @@ function formulaires_donnez_donnez_moi_verifier_dist($montant='', $raison='', $m
 		}
 	}
 
+	if (empty($erreurs['email'])) {
+		include_spip('inc/filtres');
+		if (!$email = _request('email')
+			or !($email = email_valide($email))
+			or strpos($email, '@') === false) {
+			$erreurs['email'] = _T('info_email_invalide');
+		}
+	}
+
 	if ($montant = trim(_request('montant_don'))) {
 		$montant = normaliser_saisie_montant($montant);
 		set_request('montant_don', $montant);

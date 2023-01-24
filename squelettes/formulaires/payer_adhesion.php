@@ -31,6 +31,15 @@ function formulaires_payer_adhesion_verifier_dist() {
 		}
 	}
 
+	if (empty($erreurs['email'])) {
+		include_spip('inc/filtres');
+		if (!$email = _request('email')
+			or !($email = email_valide($email))
+			or strpos($email, '@') === false) {
+			$erreurs['email'] = _T('info_email_invalide');
+		}
+	}
+
 	return $erreurs;
 }
 
