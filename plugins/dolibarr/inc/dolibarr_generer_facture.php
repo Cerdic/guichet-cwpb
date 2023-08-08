@@ -111,7 +111,7 @@ function dolibarr_generer_facture($id_facture, $facture, $items) {
 	if ($ecart_ht >= 0.01) {
 		$lignes[$k]['total_ht'] += $ecart_ht;
 	}
-	$ecart_ttc = round($facture['montant_ttc'] - $total_ttc, 2);
+	$ecart_ttc = round($facture['montant'] - $total_ttc, 2);
 	if ($ecart_ttc >= 0.01) {
 		$lignes[$k]['total_ttc'] += $ecart_ttc;
 	}
