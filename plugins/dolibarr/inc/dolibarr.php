@@ -42,7 +42,7 @@ function dolibarr_connect() {
 		// notamment avec un CONTENT_TYPE application/json sur un webhook stripe
 		$backup = [];
 		foreach(array('_COOKIE','_GET','_POST','_REQUEST','_SERVER','REQUEST_METHOD','methode',) as $k) {
-			$backup[$k] = $GLOBALS[$k];
+			$backup[$k] = ($GLOBALS[$k] ?? null);
 		}
 		$GLOBALS['_COOKIE'] = [];
 		$GLOBALS['_GET'] = [];
@@ -59,7 +59,7 @@ function dolibarr_connect() {
 			'HTTP_POST_VARS'=>'_POST',
 			'HTTP_COOKIE_VARS'=>'_COOKIE',
 			) as $k1=>$k2){
-			$GLOBALS[$k1] = $GLOBALS[$k2];
+			$GLOBALS[$k1] = ($GLOBALS[$k2] ?? null);
 		}
 		require_once(_DOLIBARR_DIR . "master.inc.php");
 		// restore globals
@@ -263,7 +263,7 @@ function dolibarr_facture_inserer($socid, $lignes) {
 	$societe->fetch($socid);
 	$facture->socid = $socid; // Put id of third party (rowid in llx_societe table)
 
-	$facture->date = mktime();
+	$facture->date = time();
 	$facture->cond_reglement_id = 1;
 
 	foreach ($lignes as $ligne) {
