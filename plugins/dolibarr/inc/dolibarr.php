@@ -384,7 +384,7 @@ function dolibarr_facture_payer($factid, $data) {
 		$db->begin();
 
 		$paiement = new paiement($db);
-		$paiement->datepaye = $data['date_paiement'];
+		$paiement->datepaye = strtotime($data['date_paiement']); // doli veut un timestamp;
 		$paiement->amounts = array($factid => $data['montant']);
 		$paiement->paiementid = $data['type_paiement'];
 		$paiement->num_paiement = $data['libelle'];    // Numero du CHQ, VIR, etc...
