@@ -48,6 +48,9 @@ function formulaires_donnez_donnez_moi_verifier_dist($montant='', $raison='', $d
 				set_request('name', $name);
 			}
 			else {
+				if (!count($erreurs)) {
+					$erreurs['message_erreur'] = '';
+				}
 				$erreurs['name'] = _L('On se connait pas encore, peux-tu préciser ton nom ?');
 			}
 		}
