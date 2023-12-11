@@ -105,7 +105,7 @@ function cwpb_trouver_nom_from_email($email) {
 	if ($auteur = sql_getfetsel('auteur', 'spip_transactions', 'statut=\'ok\' AND auteur LIKE '.sql_quote("% $email"), '', 'id_transaction DESC')) {
 		$auteur = explode(' ', $auteur);
 		if (end($auteur) === $email) {
-			array_shift($auteur);
+			array_pop($auteur);
 			return implode(' ', $auteur);
 		}
 	}
