@@ -4,7 +4,7 @@ if (!defined("_ECRIRE_INC_VERSION")) return;
 
 include_spip('formulaires/regler_facture_doli');
 
-function formulaires_donnez_donnez_moi_charger_dist($montant='', $raison='', $mobile = false) {
+function formulaires_donnez_donnez_moi_charger_dist($montant='', $raison='', $demander_nom = true, $mobile = false) {
 
 	$valeurs = array(
 		'name' => '',
@@ -12,17 +12,21 @@ function formulaires_donnez_donnez_moi_charger_dist($montant='', $raison='', $mo
 		'mobile' => '',
 		'montant_don' => $montant,
 		'raison' => $raison,
+		'_demander_nom' => $demander_nom ? ' ' : '',
 		'_demander_mobile' => $mobile ? ' ' : '',
 	);
 
 	return $valeurs;
 }
 
-function formulaires_donnez_donnez_moi_verifier_dist($montant='', $raison='', $mobile = false) {
+function formulaires_donnez_donnez_moi_verifier_dist($montant='', $raison='', $demander_nom = true, $mobile = false) {
 
 	$erreurs = array();
 
-	$oblis = ['name', 'email', 'montant_don', 'raison'];
+	$oblis = ['email', 'montant_don', 'raison'];
+	if ($demander_nom) {
+		$obli[] = 'name';
+	}
 	if ($mobile) {
 		$oblis[] = 'mobile';
 	}
@@ -39,6 +43,14 @@ function formulaires_donnez_donnez_moi_verifier_dist($montant='', $raison='', $m
 			or strpos($email, '@') === false) {
 			$erreurs['email'] = _T('info_email_invalide');
 		}
+		elseif (!$demander_nom) {
+			if ($name = cwpb_trouver_nom_from_email($email)) {
+				set_request('name', $name);
+			}
+			else {
+				$erreurs['name'] = _L('On se connait pas encore, peux-tu préciser ton nom ?');
+			}
+		}
 	}
 
 	if ($montant = trim(_request('montant_don'))) {
@@ -49,7 +61,7 @@ function formulaires_donnez_donnez_moi_verifier_dist($montant='', $raison='', $m
 	return $erreurs;
 }
 
-function formulaires_donnez_donnez_moi_traiter_dist($montant='', $raison='', $mobile = false) {
+function formulaires_donnez_donnez_moi_traiter_dist($montant='', $raison='', $demander_nom = true, $mobile = false) {
 
 	$res = array(
 		'editable' => true,
@@ -86,4 +98,23 @@ function inserer_transaction_don($name, $email, $montant, $raison, $mobile = '')
 	$id_transaction = $inserer_transaction($montant, $options);
 
 	return $id_transaction;
+}
+
+function cwpb_trouver_nom_from_email($email) {
+	// un email qui a deja fait un don ?
+	if ($auteur = sql_getfetsel('auteur', 'spip_transactions', 'statut=\'ok\' AND auteur LIKE '.sql_quote("% $email"), '', 'id_transaction DESC')) {
+		$auteur = explode(' ', $auteur);
+		if (end($auteur) === $email) {
+			array_shift($auteur);
+			return implode(' ', $auteur);
+		}
+	}
+	if ($auteur = sql_getfetsel('auteur', 'spip_transactions', 'statut=\'ok\' AND auteur LIKE '.sql_quote("\"email\":\"$email\""), '', 'id_transaction DESC')) {
+		if (preg_match(",<!--(.*)-->$,ms", $auteur, $match)
+		  and !$infos_client = json_decode($match[1], true)
+		  and !empty($infos_client['name'])) {
+			return $infos_client['name'];
+		}
+	}
+	return '';
 }
