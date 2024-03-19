@@ -43,7 +43,7 @@ function formulaires_donnez_donnez_moi_verifier_dist($montant='', $raison='', $d
 			or strpos($email, '@') === false) {
 			$erreurs['email'] = _T('info_email_invalide');
 		}
-		elseif (!$demander_nom) {
+		elseif (!$demander_nom and !_request('name')) {
 			if ($name = cwpb_trouver_nom_from_email($email)) {
 				set_request('name', $name);
 			}
