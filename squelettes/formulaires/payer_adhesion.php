@@ -11,7 +11,6 @@ function formulaires_payer_adhesion_charger_dist() {
 		'email' => '',
 		'type_adhesion' => '',
 		'recu' => '',
-		'adresse_recu' => '',
 	);
 
 	return $valeurs;
@@ -22,9 +21,6 @@ function formulaires_payer_adhesion_verifier_dist() {
 	$erreurs = array();
 
 	$oblis = ['name', 'email', 'type_adhesion'];
-	if (_request('recu') === 'oui') {
-		$oblis[] = 'adresse_recu';
-	}
 	foreach ($oblis as $obli) {
 		if (is_null($v = _request($obli)) or !strlen(trim($v))) {
 			$erreurs[$obli] = _T('info_obligatoire');
@@ -57,7 +53,6 @@ function formulaires_payer_adhesion_traiter_dist() {
 		'nom' => $name,
 		'email' => $email,
 		'recu' => _request('recu'),
-		'adresse_recu' => _request('adresse_recu'),
 	];
 	$montant = montant_adhesion($type_adhesion);
 

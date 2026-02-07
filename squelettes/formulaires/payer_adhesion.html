@@ -46,13 +46,6 @@
 					<label for="#GET{name}_#GET{val}">[(#GET{fl}|concat{':label_',#GET{name},'_',#GET{val}}|_T)]</label>
 				</div>
 			</div>
-				#SET{name,adresse_recu}#SET{obli,'obligatoire'}#SET{defaut,''}#SET{erreurs,#ENV**{erreurs}|table_valeur{#GET{name}}}
-			<div class="editer pleine_largeur editer_[(#GET{name})][ (#GET{obli})][ (#GET{erreurs}|oui)erreur]" [(#ENV{recu}|=={oui}|non)style="display:none;"]>
-				<label for="#GET{name}">[(#GET{fl}|concat{':label_',#GET{name}}|_T)]</label>[
-				<span class='erreur_message'>(#GET{erreurs})</span>
-				]<textarea name="#GET{name}" id="#GET{name}" class="textarea" rows="4">
-#ENV*{#GET{name},#GET{defaut}}</textarea>
-			</div>
 		</div>
 
 	  [(#REM) ajouter les saisies supplémentaires : extra et autre, à cet endroit ]
@@ -66,17 +59,3 @@
 <style type="text/css">
 	.euros { color:#888;}
 </style>
-<script type="text/javascript">
-	function update_recu_visible() {
-		if (jQuery('#recu_oui').prop('checked')) {
-			jQuery('.editer_adresse_recu:not(:visible)').show('fast');
-		}
-		else {
-			jQuery('.editer_adresse_recu:visible').hide('fast');
-		}
-	}
-jQuery(function() {
-	update_recu_visible();
-	jQuery('#recu_oui').on('change', update_recu_visible);
-});
-</script>
